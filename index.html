@@ -1,123 +1,306 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Эфирные помощники</title>
-    <!-- Подключаем скрипт Telegram Web Apps -->
+    <meta name="description" content="Эфирные помощники: светлый расклад, магические кубики и кристальная рулетка." />
+
+    <!-- Telegram Mini App SDK (без токена) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh; /* Занимает всю высоту экрана */
-            display: flex; /* Используем flexbox */
-            justify-content: center; /* Центрируем по горизонтали */
-            align-items: center; /* Центрируем по вертикали */
-            /* Статичный фон с градиентом, вдохновлённый твоими сайтами */
-            background: linear-gradient(135deg, #f5f7fa 0%, #e0eafc 100%);
-            font-family: Arial, sans-serif; /* Простая читаемая гарнитура */
-            /* Убираем возможность прокрутки */
-            overflow: hidden;
-        }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            text-align: center; /* Центрируем содержимое внутри */
-            max-width: 600px; /* Ограничиваем ширину */
-            padding: 20px; /* Отступы внутри */
-        }
+      html, body { min-height: 100%; }
 
-        h1 {
-            color: #5a67d8; /* Цвет заголовка */
-            margin-bottom: 2rem; /* Отступ снизу */
-            font-size: 2.5rem; /* Размер шрифта заголовка */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Лёгкая тень для глубины */
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #334155;
+        background:
+          radial-gradient(circle at 14% 18%, rgba(252, 231, 243, .9), transparent 32%),
+          radial-gradient(circle at 83% 14%, rgba(224, 242, 254, .85), transparent 34%),
+          radial-gradient(circle at 80% 82%, rgba(237, 233, 254, .8), transparent 35%),
+          linear-gradient(135deg, #fce4ec 0%, #f3e5f5 34%, #e8eaf6 66%, #e0f7fa 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
 
-        .button-container {
-            display: flex;
-            flex-direction: column; /* Располагаем кнопки вертикально */
-            gap: 1rem; /* Равномерный отступ между кнопками */
-        }
+      .page {
+        position: relative;
+        overflow: hidden;
+        min-height: 100vh;
+        padding: 40px 16px;
+      }
 
-        .magic-button {
-            /* Стили кнопки, вдохновлённые твоими сайтами */
-            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%); /* Пастельный розово-оранжевый */
-            border: none;
-            border-radius: 12px; /* Скругление */
-            color: white;
-            padding: 15px 30px; /* Внутренние отступы */
-            margin: 0.5rem 0; /* Внешние отступы сверху и снизу */
-            font-size: 1.2rem; /* Размер шрифта */
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Плавные переходы */
-            text-decoration: none; /* Убираем подчеркивание у ссылок */
-            display: block; /* Делаем блочным элементом для центрирования */
-            width: 100%; /* Полная ширина */
-            max-width: 300px; /* Максимальная ширина */
-            margin-left: auto; /* Центрируем по горизонтали */
-            margin-right: auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Тень */
-        }
+      /* Декоративные размытые блобы */
+      .blob {
+        position: absolute;
+        border-radius: 9999px;
+        filter: blur(60px);
+        pointer-events: none;
+        animation: breathe 7s ease-in-out infinite;
+      }
+      .blob-1 { top: -96px; right: -112px; width: 320px; height: 320px; background: rgba(244, 168, 212, .35); }
+      .blob-2 { bottom: -112px; left: -96px; width: 320px; height: 320px; background: rgba(196, 181, 253, .30); animation-delay: 1.3s; }
+      .blob-3 { top: 50%; right: 32px; width: 224px; height: 224px; background: rgba(103, 232, 249, .25); animation-delay: 2.2s; }
 
-        .magic-button:nth-child(2n) { /* Каждая вторая кнопка */
-             background: linear-gradient(45deg, #a1c4fd 0%, #c2e9fb 100%); /* Пастельный сине-голубой */
-        }
-        .magic-button:nth-child(3n) { /* Каждая третья кнопка */
-             background: linear-gradient(45deg, #d4fc79 0%, #96e6a1 100%); /* Пастельный зелёно-салатовый */
-        }
+      @keyframes breathe {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .55; }
+        50% { transform: translate3d(0, -10px, 0) scale(1.04); opacity: .8; }
+      }
 
-        .magic-button:hover {
-            transform: translateY(-3px); /* Лёгкий подъём при наведении */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+      /* Искорки */
+      .sparkle {
+        position: absolute;
+        pointer-events: none;
+        color: rgba(253, 224, 71, .8);
+        animation: twinkle 3.8s ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%, 100% { transform: scale(.72) rotate(0deg); opacity: .2; }
+        50% { transform: scale(1) rotate(18deg); opacity: .65; }
+      }
 
-        .magic-button:active {
-            transform: translateY(0); /* Возвращаемся на место при клике */
-        }
+      .content {
+        position: relative;
+        z-index: 10;
+        margin: 0 auto;
+        max-width: 26rem;
+        min-height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        text-align: center;
+      }
+
+      .soft-glass {
+        background: rgba(255, 255, 255, .46);
+        border: 1px solid rgba(255, 255, 255, .62);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow: 0 14px 36px rgba(124, 58, 237, .1);
+      }
+
+      .badge {
+        border-radius: 9999px;
+        padding: 6px 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .22em;
+        color: rgba(168, 85, 247, .8);
+      }
+
+      .title {
+        font-size: clamp(2.25rem, 9vw, 3rem);
+        font-weight: 700;
+        line-height: .95;
+        letter-spacing: -0.02em;
+        color: #334155;
+      }
+
+      .subtitle {
+        max-width: 20rem;
+        font-size: clamp(.875rem, 4vw, 1rem);
+        line-height: 1.5;
+        color: rgba(100, 116, 139, .8);
+      }
+
+      .links {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 80px;
+        width: 100%;
+        padding: 0 20px;
+        border-radius: 16px;
+        text-align: left;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform .3s ease, box-shadow .3s ease;
+        background:
+          linear-gradient(110deg, rgba(255,255,255,.78), rgba(255,255,255,.42)) padding-box,
+          linear-gradient(110deg, #f9a8d4, #c4b5fd, #93c5fd, #67e8f9, #fde68a) border-box;
+        border: 1px solid transparent;
+      }
+      .link::after {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 15px;
+        background: linear-gradient(100deg, rgba(249,168,212,.16), rgba(196,181,253,.18), rgba(103,232,249,.14));
+        pointer-events: none;
+      }
+      .link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 40px rgba(196, 181, 253, .35);
+      }
+      .link:active { transform: translateY(0) scale(.99); }
+
+      .link-icon {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+        width: 48px;
+        flex-shrink: 0;
+        border-radius: 16px;
+        transition: transform .3s ease;
+      }
+      .link:hover .link-icon { transform: scale(1.05); }
+      .link-icon svg { height: 24px; width: 24px; }
+
+      .link-text { position: relative; z-index: 1; flex: 1; }
+      .link-label {
+        display: block;
+        font-size: clamp(1rem, 4.5vw, 1.125rem);
+        font-weight: 600;
+        color: #334155;
+      }
+      .link-hint { display: block; font-size: 12px; color: #94a3b8; }
+
+      .link-arrow {
+        position: relative;
+        z-index: 1;
+        height: 20px;
+        width: 20px;
+        color: #cbd5e1;
+        transition: transform .3s ease, color .3s ease;
+      }
+      .link:hover .link-arrow { transform: translateX(4px); color: #64748b; }
+
+      .footer {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: .24em;
+        color: rgba(203, 213, 225, .8);
+      }
+
+      /* Появление */
+      @keyframes riseIn {
+        from { opacity: 0; transform: translateY(18px) scale(.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .rise { opacity: 0; animation: riseIn .7s ease forwards; }
+      .d1 { animation-delay: .08s; }
+      .d2 { animation-delay: .16s; }
+      .d3 { animation-delay: .24s; }
+      .d4 { animation-delay: .36s; }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <main class="page">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
 
-    <div class="container">
-        <h1>Эфирные помощники</h1>
-        <div class="button-container">
-            <a href="https://light-layout.onrender.com" target="_blank" class="magic-button">Светлый расклад</a>
-            <a href="https://kubiki.onrender.com/" target="_blank" class="magic-button">Магические кубики</a>
-            <a href="https://crystal-roulette.onrender.com" target="_blank" class="magic-button">Кристальная рулетка</a>
-        </div>
-    </div>
+      <svg class="sparkle" style="left:8%;top:16%;animation-delay:0s" width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+      <svg class="sparkle" style="left:83%;top:13%;animation-delay:.7s" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+      <svg class="sparkle" style="left:18%;top:70%;animation-delay:1.2s" width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+      <svg class="sparkle" style="left:74%;top:76%;animation-delay:1.8s" width="9" height="9" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+      <svg class="sparkle" style="left:92%;top:47%;animation-delay:2.3s" width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+      <svg class="sparkle" style="left:4%;top:43%;animation-delay:2.9s" width="8" height="8" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z"/></svg>
+
+      <section class="content">
+        <p class="soft-glass badge rise">✦ оракулы интуиции ✦</p>
+
+        <h1 class="title rise d1">эфирные<br />помощники</h1>
+
+        <p class="subtitle rise d2">выберите свой проводник, позвольте вселенной говорить с вами</p>
+
+        <nav class="links rise d3" aria-label="Ссылки на эфирные помощники">
+          <a class="link" href="https://light-layout.onrender.com" target="_blank" rel="noreferrer" data-link>
+            <span class="link-icon" style="background:#f9a8d433;color:#f9a8d4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                <path d="M12 3 14.2 9.8 21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z" fill="currentColor" fill-opacity="0.15"/>
+              </svg>
+            </span>
+            <span class="link-text">
+              <span class="link-label">светлый расклад</span>
+              <span class="link-hint">интуитивные подсказки</span>
+            </span>
+            <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://kubiki.onrender.com/" target="_blank" rel="noreferrer" data-link>
+            <span class="link-icon" style="background:#c4b5fd33;color:#c4b5fd">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="3.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15"/>
+                <rect x="13.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15"/>
+                <rect x="8.5" y="14" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15"/>
+                <path d="M6.7 8h.1M17 8h.1M12 17.5h.1" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="link-text">
+              <span class="link-label">магические кубики</span>
+              <span class="link-hint">оракул случая</span>
+            </span>
+            <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://crystal-roulette.onrender.com" target="_blank" rel="noreferrer" data-link>
+            <span class="link-icon" style="background:#67e8f933;color:#67e8f9">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                <path d="M6.2 4h11.6l3.2 5.2L12 21 3 9.2 6.2 4Z" fill="currentColor" fill-opacity="0.15"/>
+                <path d="M3 9.2h18M8.4 4 6.7 9.2 12 21M15.6 4l1.7 5.2L12 21"/>
+              </svg>
+            </span>
+            <span class="link-text">
+              <span class="link-label">кристальная рулетка</span>
+              <span class="link-hint">выбор судьбы</span>
+            </span>
+            <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </nav>
+
+        <p class="footer rise d4">✦ подсказка интуиции ✦</p>
+      </section>
+    </main>
 
     <script>
-        // Инициализация Telegram Web App
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tgWebApp = window.Telegram.WebApp;
-
-            // Можно настроить цвета и поведение здесь, если нужно
-            // tgWebApp.setBackgroundColor('#f5f7fa'); // Устанавливаем цвет фона соответствующий странице
-            // tgWebApp.setHeaderColor('#5a67d8'); // Устанавливаем цвет хедера
-
-            console.log('Telegram Web App initialized:', tgWebApp.initDataUnsafe);
-
-            // Пример функции, которая может быть вызвана из мини-аппа
-            function sendDataToBot(data) {
-                if (tgWebApp.initData) {
-                    // Отправляем данные через WebApp sendData
-                    tgWebApp.sendData(JSON.stringify(data));
-                    console.log('Data sent to bot:', data);
-                } else {
-                    console.warn('Telegram Web App initData not available.');
-                }
-            }
-
-            // Пример: можно вызвать sendDataToBot при клике на кнопку
-            // document.querySelector('.magic-button').addEventListener('click', () => {
-            //     sendDataToBot({ action: 'button_clicked', page: 'main_menu' });
-            // });
-
-        } else {
-            console.log('Telegram Web App script not loaded or not running inside Telegram.');
+      (function () {
+        // Telegram Mini App init (без токена)
+        var tg = window.Telegram && window.Telegram.WebApp;
+        if (tg) {
+          tg.ready();
+          tg.expand();
+          try {
+            tg.setHeaderColor("#f3e5f5");
+            tg.setBackgroundColor("#fce4ec");
+          } catch (e) {}
         }
-    </script>
 
-</body>
+        // Открытие ссылок: внутри Telegram — через openLink, иначе обычная навигация
+        document.querySelectorAll("[data-link]").forEach(function (el) {
+          el.addEventListener("click", function (event) {
+            if (tg && typeof tg.openLink === "function") {
+              event.preventDefault();
+              tg.openLink(el.getAttribute("href"));
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>
