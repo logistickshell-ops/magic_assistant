@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Эфирные помощники</title>
+    <!-- Подключаем скрипт Telegram Web Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Занимает всю высоту экрана */
+            display: flex; /* Используем flexbox */
+            justify-content: center; /* Центрируем по горизонтали */
+            align-items: center; /* Центрируем по вертикали */
+            /* Статичный фон с градиентом, вдохновлённый твоими сайтами */
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0eafc 100%);
+            font-family: Arial, sans-serif; /* Простая читаемая гарнитура */
+            /* Убираем возможность прокрутки */
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center; /* Центрируем содержимое внутри */
+            max-width: 600px; /* Ограничиваем ширину */
+            padding: 20px; /* Отступы внутри */
+        }
+
+        h1 {
+            color: #5a67d8; /* Цвет заголовка */
+            margin-bottom: 2rem; /* Отступ снизу */
+            font-size: 2.5rem; /* Размер шрифта заголовка */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Лёгкая тень для глубины */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Располагаем кнопки вертикально */
+            gap: 1rem; /* Равномерный отступ между кнопками */
+        }
+
+        .magic-button {
+            /* Стили кнопки, вдохновлённые твоими сайтами */
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 100%); /* Пастельный розово-оранжевый */
+            border: none;
+            border-radius: 12px; /* Скругление */
+            color: white;
+            padding: 15px 30px; /* Внутренние отступы */
+            margin: 0.5rem 0; /* Внешние отступы сверху и снизу */
+            font-size: 1.2rem; /* Размер шрифта */
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Плавные переходы */
+            text-decoration: none; /* Убираем подчеркивание у ссылок */
+            display: block; /* Делаем блочным элементом для центрирования */
+            width: 100%; /* Полная ширина */
+            max-width: 300px; /* Максимальная ширина */
+            margin-left: auto; /* Центрируем по горизонтали */
+            margin-right: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Тень */
+        }
+
+        .magic-button:nth-child(2n) { /* Каждая вторая кнопка */
+             background: linear-gradient(45deg, #a1c4fd 0%, #c2e9fb 100%); /* Пастельный сине-голубой */
+        }
+        .magic-button:nth-child(3n) { /* Каждая третья кнопка */
+             background: linear-gradient(45deg, #d4fc79 0%, #96e6a1 100%); /* Пастельный зелёно-салатовый */
+        }
+
+        .magic-button:hover {
+            transform: translateY(-3px); /* Лёгкий подъём при наведении */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .magic-button:active {
+            transform: translateY(0); /* Возвращаемся на место при клике */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Эфирные помощники</h1>
+        <div class="button-container">
+            <a href="https://light-layout.onrender.com" target="_blank" class="magic-button">Светлый расклад</a>
+            <a href="https://kubiki.onrender.com/" target="_blank" class="magic-button">Магические кубики</a>
+            <a href="https://crystal-roulette.onrender.com" target="_blank" class="magic-button">Кристальная рулетка</a>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tgWebApp = window.Telegram.WebApp;
+
+            // Можно настроить цвета и поведение здесь, если нужно
+            // tgWebApp.setBackgroundColor('#f5f7fa'); // Устанавливаем цвет фона соответствующий странице
+            // tgWebApp.setHeaderColor('#5a67d8'); // Устанавливаем цвет хедера
+
+            console.log('Telegram Web App initialized:', tgWebApp.initDataUnsafe);
+
+            // Пример функции, которая может быть вызвана из мини-аппа
+            function sendDataToBot(data) {
+                if (tgWebApp.initData) {
+                    // Отправляем данные через WebApp sendData
+                    tgWebApp.sendData(JSON.stringify(data));
+                    console.log('Data sent to bot:', data);
+                } else {
+                    console.warn('Telegram Web App initData not available.');
+                }
+            }
+
+            // Пример: можно вызвать sendDataToBot при клике на кнопку
+            // document.querySelector('.magic-button').addEventListener('click', () => {
+            //     sendDataToBot({ action: 'button_clicked', page: 'main_menu' });
+            // });
+
+        } else {
+            console.log('Telegram Web App script not loaded or not running inside Telegram.');
+        }
+    </script>
+
+</body>
+</html>
