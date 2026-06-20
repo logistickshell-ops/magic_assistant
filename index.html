@@ -1,0 +1,3468 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Эфирные помощники</title>
+    <meta name="description" content="Эфирные помощники: светлый расклад, магические кубики и кристальная рулетка." />
+
+    <!-- Telegram Mini App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Tailwind CSS (для расклада и рулетки) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React и ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- html2canvas (для расклада) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- canvas-confetti (для рулетки) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <!-- Babel standalone для JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* ===== Глобальные сбросы ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* ===== Глобальные стили (общие для всех страниц) ===== */
+        .glass {
+            background: rgba(255, 255, 255, 0.34);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.48);
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.12);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.44);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.58);
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.14);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5, #ede7f6, #e8eaf6, #e3f2fd, #e0f7fa, #e0f2f1, #f1f8e9);
+        }
+
+        /* ===== Главная страница (home) ===== */
+        #home {
+            color: #334155;
+            background:
+                radial-gradient(circle at 14% 18%, rgba(252, 231, 243, .9), transparent 32%),
+                radial-gradient(circle at 83% 14%, rgba(224, 242, 254, .85), transparent 34%),
+                radial-gradient(circle at 80% 82%, rgba(237, 233, 254, .8), transparent 35%),
+                linear-gradient(135deg, #fce4ec 0%, #f3e5f5 34%, #e8eaf6 66%, #e0f7fa 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow: hidden;
+            padding: 40px 16px;
+        }
+
+        #home .blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(60px);
+            pointer-events: none;
+            animation: breathe 7s ease-in-out infinite;
+        }
+        #home .blob-1 {
+            top: -96px;
+            right: -112px;
+            width: 320px;
+            height: 320px;
+            background: rgba(244, 168, 212, .35);
+        }
+        #home .blob-2 {
+            bottom: -112px;
+            left: -96px;
+            width: 320px;
+            height: 320px;
+            background: rgba(196, 181, 253, .30);
+            animation-delay: 1.3s;
+        }
+        #home .blob-3 {
+            top: 50%;
+            right: 32px;
+            width: 224px;
+            height: 224px;
+            background: rgba(103, 232, 249, .25);
+            animation-delay: 2.2s;
+        }
+
+        @keyframes breathe {
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: .55;
+            }
+            50% {
+                transform: translate3d(0, -10px, 0) scale(1.04);
+                opacity: .8;
+            }
+        }
+
+        #home .sparkle {
+            position: absolute;
+            pointer-events: none;
+            color: rgba(253, 224, 71, .8);
+            animation: twinkle 3.8s ease-in-out infinite;
+        }
+        @keyframes twinkle {
+            0%,
+            100% {
+                transform: scale(.72) rotate(0deg);
+                opacity: .2;
+            }
+            50% {
+                transform: scale(1) rotate(18deg);
+                opacity: .65;
+            }
+        }
+
+        #home .content {
+            position: relative;
+            z-index: 10;
+            margin: 0 auto;
+            max-width: 26rem;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            text-align: center;
+        }
+
+        #home .soft-glass {
+            background: rgba(255, 255, 255, .46);
+            border: 1px solid rgba(255, 255, 255, .62);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 14px 36px rgba(124, 58, 237, .1);
+        }
+
+        #home .badge {
+            border-radius: 9999px;
+            padding: 6px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .22em;
+            color: rgba(168, 85, 247, .8);
+        }
+
+        #home .title {
+            font-size: clamp(2.25rem, 9vw, 3rem);
+            font-weight: 700;
+            line-height: .95;
+            letter-spacing: -0.02em;
+            color: #334155;
+        }
+
+        #home .subtitle {
+            max-width: 20rem;
+            font-size: clamp(.875rem, 4vw, 1rem);
+            line-height: 1.5;
+            color: rgba(100, 116, 139, .8);
+        }
+
+        #home .links {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #home .link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-height: 80px;
+            width: 100%;
+            padding: 0 20px;
+            border-radius: 16px;
+            text-align: left;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .3s ease, box-shadow .3s ease;
+            background:
+                linear-gradient(110deg, rgba(255, 255, 255, .78), rgba(255, 255, 255, .42)) padding-box,
+                linear-gradient(110deg, #f9a8d4, #c4b5fd, #93c5fd, #67e8f9, #fde68a) border-box;
+            border: 1px solid transparent;
+        }
+        #home .link::after {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: 15px;
+            background: linear-gradient(100deg, rgba(249, 168, 212, .16), rgba(196, 181, 253, .18), rgba(103, 232, 249, .14));
+            pointer-events: none;
+        }
+        #home .link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 24px 40px rgba(196, 181, 253, .35);
+        }
+        #home .link:active {
+            transform: translateY(0) scale(.99);
+        }
+
+        #home .link-icon {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            width: 48px;
+            flex-shrink: 0;
+            border-radius: 16px;
+            transition: transform .3s ease;
+        }
+        #home .link:hover .link-icon {
+            transform: scale(1.05);
+        }
+        #home .link-icon svg {
+            height: 24px;
+            width: 24px;
+        }
+
+        #home .link-text {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        #home .link-label {
+            display: block;
+            font-size: clamp(1rem, 4.5vw, 1.125rem);
+            font-weight: 600;
+            color: #334155;
+        }
+        #home .link-hint {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        #home .link-arrow {
+            position: relative;
+            z-index: 1;
+            height: 20px;
+            width: 20px;
+            color: #cbd5e1;
+            transition: transform .3s ease, color .3s ease;
+        }
+        #home .link:hover .link-arrow {
+            transform: translateX(4px);
+            color: #64748b;
+        }
+
+        #home .footer {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .24em;
+            color: rgba(203, 213, 225, .8);
+        }
+
+        @keyframes riseIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        #home .rise {
+            opacity: 0;
+            animation: riseIn .7s ease forwards;
+        }
+        #home .d1 {
+            animation-delay: .08s;
+        }
+        #home .d2 {
+            animation-delay: .16s;
+        }
+        #home .d3 {
+            animation-delay: .24s;
+        }
+        #home .d4 {
+            animation-delay: .36s;
+        }
+
+        /* ===== Стили для кубиков (изолированы через #dice-app) ===== */
+        #dice-app {
+            /* общие переменные */
+            --bg: #faf6ef;
+            --bg-soft: #f3ede1;
+            --ink: #2d2a44;
+            --ink-soft: #6b6680;
+            --accent: #7c6ad1;
+            --accent-deep: #5b4bb0;
+            --border: #e8dfd1;
+            --sat: env(safe-area-inset-top);
+            --sab: env(safe-area-inset-bottom);
+            --sal: env(safe-area-inset-left);
+            --sar: env(safe-area-inset-right);
+        }
+
+        @property --frx {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+        @property --fry {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        #dice-app * {
+            box-sizing: border-box;
+        }
+
+        #dice-app {
+            font-family: "Inter", system-ui, sans-serif;
+            color: var(--ink);
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(124, 106, 209, 0.06), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(210, 170, 120, 0.08), transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.6), transparent 60%);
+            min-height: 100vh;
+            padding-top: var(--sat);
+            padding-bottom: var(--sab);
+            padding-left: var(--sal);
+            padding-right: var(--sar);
+            touch-action: manipulation;
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior-y: contain;
+        }
+
+        #dice-app button {
+            font-family: inherit;
+            cursor: pointer;
+            touch-action: manipulation;
+            border: none;
+            background: none;
+            color: inherit;
+        }
+        #dice-app button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+        @media (hover: none) and (pointer: coarse) {
+            #dice-app button:active {
+                opacity: 0.8;
+            }
+        }
+
+        #dice-app .font-display {
+            font-family: "Cormorant Garamond", "Georgia", serif;
+            letter-spacing: 0.01em;
+        }
+
+        #dice-app .wrap {
+            max-width: 768px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 1.5rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .wrap {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        #dice-app header {
+            margin-bottom: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app header {
+                margin-bottom: 2.5rem;
+            }
+        }
+
+        #dice-app .field {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 2rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 16px 48px -24px rgba(91, 75, 176, 0.3);
+            overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            #dice-app .field {
+                min-height: 260px;
+                padding: 2.5rem 1.5rem;
+                border-radius: 1.75rem;
+            }
+        }
+        #dice-app .field::before,
+        #dice-app .field::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+        #dice-app .field::before {
+            left: 1rem;
+            top: 1rem;
+            width: 4rem;
+            height: 4rem;
+            background: rgba(124, 106, 209, 0.05);
+        }
+        #dice-app .field::after {
+            right: 1.5rem;
+            bottom: 1rem;
+            width: 5rem;
+            height: 5rem;
+            background: rgba(210, 170, 120, 0.1);
+        }
+        @media (min-width: 640px) {
+            #dice-app .field::before {
+                width: 6rem;
+                height: 6rem;
+            }
+            #dice-app .field::after {
+                width: 8rem;
+                height: 8rem;
+            }
+        }
+
+        #dice-app .sum-badge {
+            position: absolute;
+            right: 0.75rem;
+            top: 0.75rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 999px;
+            padding: 0.25rem 0.625rem;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+        @media (min-width: 640px) {
+            #dice-app .sum-badge {
+                right: 1.25rem;
+                top: 1.25rem;
+                padding: 0.25rem 0.75rem;
+                font-size: 12px;
+            }
+        }
+        #dice-app .sum-badge b {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        #dice-app .dice-grid {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .dice-grid {
+                gap: 2.5rem;
+            }
+        }
+
+        #dice-app .die {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #dice-app .die-scene {
+            perspective: 500px;
+        }
+        #dice-app .die-preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        #dice-app .cube {
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        #dice-app .cube-face {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 16%;
+            backface-visibility: hidden;
+            border-radius: 16%;
+            border: 1.5px solid #ddd5c4;
+        }
+        #dice-app .cube-face--top {
+            background: linear-gradient(135deg, #fffdf7, #f5f0e6);
+        }
+        #dice-app .cube-face--front {
+            background: linear-gradient(135deg, #f8f3e9, #f0eadc);
+        }
+        #dice-app .cube-face--back {
+            background: linear-gradient(135deg, #eee8da, #e6dfd1);
+        }
+        #dice-app .cube-face--right {
+            background: linear-gradient(135deg, #f2ece0, #ebe4d6);
+        }
+        #dice-app .cube-face--left {
+            background: linear-gradient(135deg, #f0eadc, #e9e2d4);
+        }
+        #dice-app .cube-face--bottom {
+            background: linear-gradient(135deg, #eae4d6, #e2dbc9);
+        }
+        #dice-app .cube-face::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.04);
+            pointer-events: none;
+        }
+        #dice-app .cube-face--front {
+            transform: translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--back {
+            transform: rotateY(180deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--right {
+            transform: rotateY(90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--left {
+            transform: rotateY(-90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--top {
+            transform: rotateX(-90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--bottom {
+            transform: rotateX(90deg) translateZ(calc(var(--hs)));
+        }
+
+        #dice-app .cube-dot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #dice-app .cube-dot.active::after {
+            content: "";
+            display: block;
+            width: 78%;
+            height: 78%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 38%, #443f5c, #2d2a44);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        #dice-app .flat-face {
+            background: linear-gradient(135deg, #fffdf7, #f5f0e6);
+            border: 1.5px solid #ddd5c4;
+            border-radius: 16%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 16%;
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.04),
+                0 10px 18px rgba(79, 70, 229, 0.15);
+            transform-style: flat;
+        }
+
+        #dice-app .ground-shadow {
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(45, 42, 68, 0.18) 0%, transparent 70%);
+        }
+
+        /* Анимации кубиков */
+        @keyframes diceThrow {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            3% {
+                transform: translate3d(calc(var(--dir, 1) * -3px), 3px, 0) scale(0.96);
+            }
+            7% {
+                transform: translate3d(calc(var(--dir, 1) * 6px), -50px, 0) scale(1.06);
+            }
+            11% {
+                transform: translate3d(calc(var(--dir, 1) * 11px), -80px, 0) scale(1.1);
+            }
+            15% {
+                transform: translate3d(calc(var(--dir, 1) * 14px), -62px, 0) scale(1.07);
+            }
+            19% {
+                transform: translate3d(calc(var(--dir, 1) * 14px), -18px, 0) scale(1.02);
+            }
+            22% {
+                transform: translate3d(calc(var(--dir, 1) * 14px), 4px, 0) scale(0.96);
+            }
+            26% {
+                transform: translate3d(calc(var(--dir, 1) * 12px), -38px, 0) scale(1.05);
+            }
+            30% {
+                transform: translate3d(calc(var(--dir, 1) * 9px), -24px, 0) scale(1.02);
+            }
+            34% {
+                transform: translate3d(calc(var(--dir, 1) * 6px), -6px, 0) scale(1);
+            }
+            37% {
+                transform: translate3d(calc(var(--dir, 1) * 5px), 4px, 0) scale(0.98);
+            }
+            40% {
+                transform: translate3d(calc(var(--dir, 1) * 3px), -18px, 0) scale(1.02);
+            }
+            44% {
+                transform: translate3d(calc(var(--dir, 1) * 1px), -20px, 0) scale(1.03);
+            }
+            48% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), -6px, 0) scale(1);
+            }
+            51% {
+                transform: translate3d(calc(var(--dir, 1) * -2px), 3px, 0) scale(0.99);
+            }
+            55% {
+                transform: translate3d(calc(var(--dir, 1) * -2px), -10px, 0) scale(1.01);
+            }
+            59% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), -4px, 0) scale(1);
+            }
+            63% {
+                transform: translate3d(0, 2px, 0) scale(1);
+            }
+            67% {
+                transform: translate3d(0, -3px, 0) scale(1);
+            }
+            70% {
+                transform: translate3d(0, -1px, 0) scale(1);
+            }
+            75% {
+                transform: translate3d(0, 1px, 0) scale(1);
+            }
+            80% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+        }
+
+        @keyframes diceSpin {
+            0% {
+                transform: rotateX(0) rotateY(0) rotateZ(0);
+            }
+            10% {
+                transform: rotateX(-520deg) rotateY(360deg) rotateZ(-220deg);
+            }
+            20% {
+                transform: rotateX(-1080deg) rotateY(760deg) rotateZ(-460deg);
+            }
+            30% {
+                transform: rotateX(-1540deg) rotateY(1100deg) rotateZ(-680deg);
+            }
+            40% {
+                transform: rotateX(-1910deg) rotateY(1380deg) rotateZ(-860deg);
+            }
+            50% {
+                transform: rotateX(-2190deg) rotateY(1560deg) rotateZ(-980deg);
+            }
+            60% {
+                transform: rotateX(-2370deg) rotateY(1680deg) rotateZ(-1040deg);
+            }
+            70% {
+                transform: rotateX(-2460deg) rotateY(1740deg) rotateZ(-1066deg);
+            }
+            80% {
+                transform: rotateX(-2500deg) rotateY(1780deg) rotateZ(-1078deg);
+            }
+            90% {
+                transform: rotateX(-2515deg) rotateY(1795deg) rotateZ(-1079deg);
+            }
+            100% {
+                transform: rotateX(-2520deg) rotateY(1800deg) rotateZ(-1080deg);
+            }
+        }
+
+        @keyframes diceOrient {
+            0%,
+            84% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(var(--frx)) rotateY(var(--fry));
+            }
+        }
+
+        @keyframes diceShadow {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            3% {
+                transform: scale(0.98);
+                opacity: 0.48;
+            }
+            7% {
+                transform: scale(0.5);
+                opacity: 0.15;
+            }
+            11% {
+                transform: scale(0.35);
+                opacity: 0.1;
+            }
+            15% {
+                transform: scale(0.45);
+                opacity: 0.14;
+            }
+            19% {
+                transform: scale(0.6);
+                opacity: 0.28;
+            }
+            22% {
+                transform: scale(0.92);
+                opacity: 0.48;
+            }
+            26% {
+                transform: scale(0.5);
+                opacity: 0.16;
+            }
+            30% {
+                transform: scale(0.6);
+                opacity: 0.24;
+            }
+            34% {
+                transform: scale(0.78);
+                opacity: 0.36;
+            }
+            37% {
+                transform: scale(0.9);
+                opacity: 0.44;
+            }
+            40% {
+                transform: scale(0.68);
+                opacity: 0.28;
+            }
+            44% {
+                transform: scale(0.58);
+                opacity: 0.2;
+            }
+            48% {
+                transform: scale(0.8);
+                opacity: 0.36;
+            }
+            51% {
+                transform: scale(0.88);
+                opacity: 0.42;
+            }
+            55% {
+                transform: scale(0.78);
+                opacity: 0.36;
+            }
+            59% {
+                transform: scale(0.85);
+                opacity: 0.4;
+            }
+            63% {
+                transform: scale(0.92);
+                opacity: 0.44;
+            }
+            67% {
+                transform: scale(0.9);
+                opacity: 0.44;
+            }
+            70% {
+                transform: scale(0.92);
+                opacity: 0.45;
+            }
+            75% {
+                transform: scale(0.96);
+                opacity: 0.47;
+            }
+            80% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        #dice-app .anim-throw {
+            animation: diceThrow 3s linear both;
+            will-change: transform;
+        }
+        #dice-app .anim-spin {
+            animation: diceSpin 3s linear both;
+            will-change: transform;
+        }
+        #dice-app .anim-orient {
+            animation: diceOrient 3s cubic-bezier(0.55, 0, 1, 1) both;
+            will-change: transform;
+        }
+        #dice-app .anim-shadow {
+            animation: diceShadow 3s linear both;
+            will-change: transform, opacity;
+        }
+
+        #dice-app .panel {
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.25rem;
+            padding: 1rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .panel {
+                margin-top: 1.5rem;
+                border-radius: 1.75rem;
+                padding: 1.25rem;
+            }
+        }
+
+        #dice-app .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .row {
+                margin-bottom: 1.25rem;
+            }
+        }
+
+        #dice-app .label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+        @media (min-width: 640px) {
+            #dice-app .label {
+                font-size: 14px;
+            }
+        }
+
+        #dice-app .seg {
+            display: inline-flex;
+            border: 1px solid var(--border);
+            background: rgba(243, 237, 225, 0.6);
+            border-radius: 999px;
+            padding: 0.125rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .seg {
+                padding: 0.25rem;
+            }
+        }
+
+        #dice-app .seg button {
+            min-width: 40px;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            transition: all 0.2s;
+        }
+        @media (min-width: 640px) {
+            #dice-app .seg button {
+                min-width: 44px;
+                padding: 0.5rem 1.25rem;
+            }
+        }
+        #dice-app .seg button:hover:not(:disabled) {
+            color: var(--ink);
+        }
+        #dice-app .seg button.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(124, 106, 209, 0.3);
+        }
+
+        #dice-app .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .actions {
+                gap: 0.75rem;
+            }
+        }
+
+        #dice-app .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        @media (min-width: 640px) {
+            #dice-app .btn {
+                padding: 1rem 1.5rem;
+                border-radius: 1rem;
+                font-size: 16px;
+            }
+        }
+        #dice-app .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        #dice-app .btn-primary {
+            background: var(--accent-deep);
+            color: #fff;
+            box-shadow: 0 8px 24px -8px rgba(91, 75, 176, 0.5);
+        }
+        #dice-app .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 12px 32px -8px rgba(91, 75, 176, 0.65);
+        }
+        #dice-app .btn-primary:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+        #dice-app .btn-primary.rolling {
+            opacity: 0.8;
+        }
+
+        #dice-app .btn-ghost {
+            background: #fff;
+            color: var(--ink);
+            border: 1px solid var(--border);
+        }
+        #dice-app .btn-ghost:hover:not(:disabled) {
+            border-color: rgba(124, 106, 209, 0.4);
+            color: var(--accent-deep);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        #dice-app .spin-icon {
+            animation: spin 0.8s linear infinite;
+        }
+        #dice-app .hover-rotate {
+            transition: transform 0.3s;
+        }
+        #dice-app .btn-primary:hover:not(:disabled) .hover-rotate {
+            transform: rotate(45deg);
+        }
+
+        #dice-app .history {
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.25rem;
+            overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            #dice-app .history {
+                margin-top: 1.5rem;
+                border-radius: 1.75rem;
+            }
+        }
+
+        #dice-app .history-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-head {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        #dice-app .history-title {
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-weight: 500;
+            font-size: 1.25rem;
+            margin: 0;
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-title {
+                font-size: 1.5rem;
+            }
+        }
+        #dice-app .history-sub {
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-sub {
+                font-size: 12px;
+            }
+        }
+
+        #dice-app .history-clear {
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            transition: color 0.2s;
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-clear {
+                font-size: 12px;
+            }
+        }
+        #dice-app .history-clear:hover {
+            color: var(--accent-deep);
+        }
+
+        #dice-app .history-body {
+            padding: 0.5rem 0.75rem;
+            max-height: 360px;
+            overflow-y: auto;
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-body {
+                padding: 0.75rem 1rem;
+            }
+        }
+        #dice-app .history-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        #dice-app .history-body::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 999px;
+        }
+
+        #dice-app .history-empty {
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: var(--ink-soft);
+            font-size: 12px;
+        }
+        #dice-app .history-empty-icon {
+            font-size: 1.875rem;
+            opacity: 0.4;
+            margin-bottom: 0.75rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .history-empty {
+                padding: 3rem 1.5rem;
+                font-size: 14px;
+            }
+            #dice-app .history-empty-icon {
+                font-size: 2.5rem;
+            }
+        }
+
+        #dice-app .hrow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.75rem;
+            background: rgba(243, 237, 225, 0.4);
+            margin-bottom: 0.375rem;
+        }
+        @media (min-width: 640px) {
+            #dice-app .hrow {
+                padding: 0.75rem 1rem;
+                border-radius: 1rem;
+                margin-bottom: 0.5rem;
+            }
+        }
+        #dice-app .hrow-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 0;
+            flex: 1;
+        }
+        @media (min-width: 640px) {
+            #dice-app .hrow-left {
+                gap: 0.75rem;
+            }
+        }
+
+        #dice-app .chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 0.375rem;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 0.375rem;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        @media (min-width: 640px) {
+            #dice-app .chip {
+                min-width: 32px;
+                height: 32px;
+                padding: 0 0.5rem;
+                font-size: 14px;
+                border-radius: 0.5rem;
+            }
+        }
+        #dice-app .chip-row {
+            display: flex;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+        @media (min-width: 640px) {
+            #dice-app .chip-row {
+                gap: 0.375rem;
+            }
+        }
+
+        #dice-app .hrow-meta {
+            font-size: 10px;
+            color: var(--ink-soft);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (min-width: 640px) {
+            #dice-app .hrow-meta {
+                font-size: 12px;
+            }
+        }
+
+        #dice-app .hrow-sum {
+            flex-shrink: 0;
+            background: rgba(124, 106, 209, 0.1);
+            color: var(--accent-deep);
+            border-radius: 999px;
+            padding: 0.125rem 0.625rem;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        @media (min-width: 640px) {
+            #dice-app .hrow-sum {
+                padding: 0.25rem 0.75rem;
+                font-size: 14px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        #dice-app .fade-in-up {
+            animation: fadeInUp 0.35s ease-out both;
+        }
+
+        #dice-app footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 10px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(107, 102, 128, 0.7);
+        }
+        @media (min-width: 640px) {
+            #dice-app footer {
+                margin-top: 2.5rem;
+                font-size: 12px;
+            }
+        }
+
+        #dice-app .toast {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            pointer-events: none;
+        }
+        @media (min-width: 640px) {
+            #dice-app .toast {
+                bottom: 1.5rem;
+            }
+        }
+        #dice-app .toast-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @media (min-width: 640px) {
+            #dice-app .toast-box {
+                padding: 0.625rem 1.25rem;
+                font-size: 14px;
+            }
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 16px) scale(0.92);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+        #dice-app .toast-box {
+            transform: none;
+        }
+
+        #dice-app .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(45, 42, 68, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #dice-app .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #dice-app .modal-content {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        #dice-app .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        #dice-app .modal-img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        #dice-app .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        #dice-app .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        #dice-app .modal-btn-save {
+            background: var(--accent-deep);
+            color: #fff;
+        }
+        #dice-app .modal-btn-close {
+            background: #f1f1f1;
+            color: #333;
+        }
+
+        @media (max-width: 639px) {
+            #dice-app .hrow-meta {
+                display: none;
+            }
+        }
+
+        @media (max-width: 360px) {
+            #dice-app .dice-grid {
+                gap: 0.75rem !important;
+            }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+            #dice-app .field {
+                min-height: 140px !important;
+                padding: 0.75rem 1rem !important;
+            }
+        }
+
+        /* ===== Стили для расклада (layout-app) ===== */
+        #layout-app {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e0f7fa 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        #layout-app .card-back-rainbow-fallback {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ffecd2, #a1c4fd, #c2e9fb, #d4fc79, #96e6a1);
+            background-size: 400% 400%;
+            animation: rainbowShiftFallback 10s ease infinite;
+        }
+        @keyframes rainbowShiftFallback {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ===== Стили для рулетки (roulette-app) ===== */
+        #roulette-app {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        #roulette-app .glass {
+            background: rgba(255, 255, 255, 0.34);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.48);
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.12);
+        }
+        #roulette-app .glass-strong {
+            background: rgba(255, 255, 255, 0.44);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.58);
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.14);
+        }
+        #roulette-app .gradient-bg {
+            background: linear-gradient(135deg, #fce4ec, #f3e5f5, #ede7f6, #e8eaf6, #e3f2fd, #e0f7fa, #e0f2f1, #f1f8e9);
+        }
+        @keyframes modalPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        #roulette-app ::-webkit-scrollbar {
+            width: 6px;
+        }
+        #roulette-app ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #roulette-app ::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.22);
+            border-radius: 3px;
+        }
+        #roulette-app ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.34);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Главная страница (HOME) ===== -->
+    <div id="home">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <svg class="sparkle" style="left:8%;top:16%;animation-delay:0s" width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+        <svg class="sparkle" style="left:83%;top:13%;animation-delay:.7s" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+        <svg class="sparkle" style="left:18%;top:70%;animation-delay:1.2s" width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+        <svg class="sparkle" style="left:74%;top:76%;animation-delay:1.8s" width="9" height="9" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+        <svg class="sparkle" style="left:92%;top:47%;animation-delay:2.3s" width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+        <svg class="sparkle" style="left:4%;top:43%;animation-delay:2.9s" width="8" height="8" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0 10 6 16 8 10 10 8 16 6 10 0 8 6 6 8 0Z" /></svg>
+
+        <section class="content">
+            <p class="soft-glass badge rise">✦ оракулы интуиции ✦</p>
+
+            <h1 class="title rise d1">эфирные<br />помощники</h1>
+
+            <p class="subtitle rise d2">выберите свой проводник, позвольте вселенной говорить с вами</p>
+
+            <nav class="links rise d3" aria-label="Ссылки на эфирные помощники">
+                <button class="link" onclick="showPage('layout')">
+                    <span class="link-icon" style="background:#f9a8d433;color:#f9a8d4">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                            <path d="M12 3 14.2 9.8 21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z" fill="currentColor" fill-opacity="0.15" />
+                        </svg>
+                    </span>
+                    <span class="link-text">
+                        <span class="link-label">светлый расклад</span>
+                        <span class="link-hint">интуитивные подсказки</span>
+                    </span>
+                    <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <button class="link" onclick="showPage('dice')">
+                    <span class="link-icon" style="background:#c4b5fd33;color:#c4b5fd">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <rect x="3.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                            <rect x="13.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                            <rect x="8.5" y="14" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                            <path d="M6.7 8h.1M17 8h.1M12 17.5h.1" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                    <span class="link-text">
+                        <span class="link-label">магические кубики</span>
+                        <span class="link-hint">оракул случая</span>
+                    </span>
+                    <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <button class="link" onclick="showPage('roulette')">
+                    <span class="link-icon" style="background:#67e8f933;color:#67e8f9">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+                            <path d="M6.2 4h11.6l3.2 5.2L12 21 3 9.2 6.2 4Z" fill="currentColor" fill-opacity="0.15" />
+                            <path d="M3 9.2h18M8.4 4 6.7 9.2 12 21M15.6 4l1.7 5.2L12 21" />
+                        </svg>
+                    </span>
+                    <span class="link-text">
+                        <span class="link-label">кристальная рулетка</span>
+                        <span class="link-hint">выбор судьбы</span>
+                    </span>
+                    <svg class="link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </nav>
+
+            <p class="footer rise d4">✦ подсказка интуиции ✦</p>
+        </section>
+    </div>
+
+    <!-- ===== Контейнер для расклада ===== -->
+    <div id="layout-app" style="display:none;"></div>
+
+    <!-- ===== Контейнер для кубиков ===== -->
+    <div id="dice-app" style="display:none;">
+        <div class="wrap">
+            <!-- Новая шапка как в рулетке -->
+            <header class="glass border-b border-white/10">
+                <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-sky-300 flex items-center justify-center shadow-lg shadow-violet-400/25 ring-1 ring-white/40">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="w-5 h-5 text-white">
+                                <rect x="3.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                                <rect x="13.5" y="4.5" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                                <rect x="8.5" y="14" width="7" height="7" rx="1.6" fill="currentColor" fill-opacity="0.15" />
+                                <path d="M6.7 8h.1M17 8h.1M12 17.5h.1" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-700 tracking-tight">Магические кубики</h1>
+                            <p class="text-xs text-slate-500">оракул случая</p>
+                        </div>
+                    </div>
+                    <button class="bg-white/30 backdrop-blur rounded-full p-2 shadow-sm border border-white/40 hover:bg-white/50 transition-colors text-slate-600" onclick="showPage('home')" aria-label="Назад">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <section>
+                <div class="field" id="dice-field">
+                    <div class="dice-grid" id="dice-grid"></div>
+                    <div class="sum-badge">Σ <b id="dice-sumBadge">0</b></div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="row">
+                    <div class="label">Кубиков</div>
+                    <div class="seg" id="dice-seg">
+                        <button data-count="1" class="active">1</button>
+                        <button data-count="2">2</button>
+                        <button data-count="3">3</button>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" id="dice-btnRoll">
+                        <svg id="dice-rollIcon" class="hover-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"></circle>
+                            <circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"></circle>
+                            <circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"></circle>
+                            <circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"></circle>
+                        </svg>
+                        <span id="dice-btnRollText">Бросить</span>
+                    </button>
+                    <button class="btn btn-ghost" id="dice-btnSnapshot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        <span id="dice-btnSnapshotText">Снимок</span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="history">
+                <div class="history-head">
+                    <div>
+                        <h2 class="history-title">История бросков</h2>
+                        <p class="history-sub" id="dice-historySub">пока пусто</p>
+                    </div>
+                    <button class="history-clear" id="dice-btnClear" style="display:none">Очистить</button>
+                </div>
+                <div class="history-body" id="dice-historyBody">
+                    <div class="history-empty" id="dice-historyEmpty">
+                        <div class="history-empty-icon">🎲</div>
+                        Сделайте первый бросок — и здесь появятся записи
+                    </div>
+                </div>
+            </section>
+
+            <footer>© <span id="dice-year">2026</span> · created Disa.</footer>
+        </div>
+
+        <!-- Modal for Snapshot -->
+        <div class="modal-overlay" id="dice-snapshotModal">
+            <div class="modal-content">
+                <img id="dice-modalImg" class="modal-img" src="" alt="Snapshot">
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-save" id="dice-modalSaveBtn">Сохранить / Поделиться</button>
+                    <button class="modal-btn modal-btn-close" id="dice-modalCloseBtn">Закрыть</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="dice-toast" style="display:none">
+            <div class="toast-box" id="dice-toastBox"></div>
+        </div>
+    </div>
+
+    <!-- ===== Контейнер для рулетки ===== -->
+    <div id="roulette-app" style="display:none;"></div>
+
+    <script>
+        // ===== Инициализация Telegram (один раз) =====
+        (function() {
+            var tg = window.Telegram && window.Telegram.WebApp;
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                try {
+                    tg.setHeaderColor("#f3e5f5");
+                    tg.setBackgroundColor("#fce4ec");
+                } catch (e) {}
+            }
+            window._tg = tg; // сохраняем глобально
+        })();
+
+        // ===== Функции переключения страниц =====
+        var currentPage = 'home';
+        var layoutRoot = null;
+        var rouletteRoot = null;
+        var diceInitialized = false;
+
+        function hideAll() {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('layout-app').style.display = 'none';
+            document.getElementById('dice-app').style.display = 'none';
+            document.getElementById('roulette-app').style.display = 'none';
+        }
+
+        function showPage(page) {
+            if (page === currentPage) return;
+            hideAll();
+
+            if (page === 'home') {
+                document.getElementById('home').style.display = '';
+                currentPage = 'home';
+                return;
+            }
+
+            if (page === 'layout') {
+                document.getElementById('layout-app').style.display = '';
+                if (!layoutRoot) {
+                    var container = document.getElementById('layout-app');
+                    layoutRoot = ReactDOM.createRoot(container);
+                    // Рендерим компонент LayoutApp (определён ниже в Babel)
+                    layoutRoot.render(React.createElement(LayoutApp));
+                }
+                currentPage = 'layout';
+            } else if (page === 'dice') {
+                document.getElementById('dice-app').style.display = '';
+                if (!diceInitialized) {
+                    initDice(document.getElementById('dice-app'));
+                    diceInitialized = true;
+                }
+                currentPage = 'dice';
+            } else if (page === 'roulette') {
+                document.getElementById('roulette-app').style.display = '';
+                if (!rouletteRoot) {
+                    var container = document.getElementById('roulette-app');
+                    rouletteRoot = ReactDOM.createRoot(container);
+                    // Рендерим компонент RouletteApp (определён ниже в Babel)
+                    rouletteRoot.render(React.createElement(RouletteApp));
+                }
+                currentPage = 'roulette';
+            }
+        }
+
+        // ===== Инициализация кубиков (ванильный JS, изолированный) =====
+        function initDice(container) {
+            // Все элементы внутри контейнера
+            var $ = function(id) { return container.querySelector('#' + id); };
+
+            var fieldEl = $('dice-field');
+            var gridEl = $('dice-grid');
+            var sumBadge = $('dice-sumBadge');
+            var segEl = $('dice-seg');
+            var btnRoll = $('dice-btnRoll');
+            var btnRollText = $('dice-btnRollText');
+            var rollIcon = $('dice-rollIcon');
+            var btnSnapshot = $('dice-btnSnapshot');
+            var btnSnapshotText = $('dice-btnSnapshotText');
+            var historyBody = $('dice-historyBody');
+            var historyEmpty = $('dice-historyEmpty');
+            var historySub = $('dice-historySub');
+            var btnClear = $('dice-btnClear');
+            var toastEl = $('dice-toast');
+            var toastBox = $('dice-toastBox');
+            var modal = $('dice-snapshotModal');
+            var modalImg = $('dice-modalImg');
+            var modalSaveBtn = $('dice-modalSaveBtn');
+            var modalCloseBtn = $('dice-modalCloseBtn');
+
+            // ── State ─────────────────────────────────────────────────────
+            var state = {
+                count: 1,
+                dice: [3],
+                rolling: false,
+                snapshotting: false,
+                snapshotBusy: false,
+                history: [],
+                counter: 0,
+            };
+            var ROLL_DURATION = 3000;
+
+            var FACE_TO_FRONT = {
+                1: { rx: 0, ry: 0 },
+                2: { rx: 0, ry: -90 },
+                3: { rx: 90, ry: 0 },
+                4: { rx: -90, ry: 0 },
+                5: { rx: 0, ry: 90 },
+                6: { rx: 0, ry: 180 },
+            };
+            var FACES = [
+                { cls: "front", n: 1 },
+                { cls: "back", n: 6 },
+                { cls: "right", n: 2 },
+                { cls: "left", n: 5 },
+                { cls: "top", n: 3 },
+                { cls: "bottom", n: 4 },
+            ];
+            var DOT_MAP = {
+                1: [4],
+                2: [2, 6],
+                3: [2, 4, 6],
+                4: [0, 2, 6, 8],
+                5: [0, 2, 4, 6, 8],
+                6: [0, 2, 3, 5, 6, 8],
+            };
+
+            // ── Rendering helpers ─────────────────────────────────────────
+            function dieSize() {
+                var w = window.innerWidth;
+                var h = window.innerHeight;
+                if (h < 500) return Math.min(72, Math.floor((h - 120) / state.count));
+                if (w < 380) return Math.floor(Math.min((w - 80) / state.count, 85));
+                if (w < 640) return Math.floor(Math.min((w - 100) / state.count, 100));
+                return 110;
+            }
+
+            function faceDotsHTML(n) {
+                var active = DOT_MAP[n] || DOT_MAP[1];
+                var out = "";
+                for (var i = 0; i < 9; i++) {
+                    out += '<div class="cube-dot ' + (active.includes(i) ? "active" : "") + '"></div>';
+                }
+                return out;
+            }
+
+            function dieHTML(value, idx, size, rolling, flat) {
+                if (flat) {
+                    return '<div class="die" style="width:' + size + 'px">' +
+                        '<div class="flat-face" style="width:' + size + 'px;height:' + size + 'px">' +
+                        faceDotsHTML(value) +
+                        '</div>' +
+                        '<div class="ground-shadow" style="width:' + (size * 0.55) + 'px;height:' + (size * 0.07) +
+                        'px;margin-top:' + (size * 0.08) + 'px"></div>' +
+                        '</div>';
+                }
+
+                var face = FACE_TO_FRONT[value] || FACE_TO_FRONT[1];
+                var rx = face.rx,
+                    ry = face.ry;
+                var hs = size / 2;
+                var dir = idx % 2 === 0 ? 1 : -1;
+                var delay = idx * 200;
+                var cubeStyle = rolling ?
+                    'width:' + size + 'px;height:' + size + 'px;transform:rotateX(0deg) rotateY(0deg)' :
+                    'width:' + size + 'px;height:' + size + 'px;transform:rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+
+                var facesHTML = "";
+                for (var f = 0; f < FACES.length; f++) {
+                    var cls = FACES[f].cls;
+                    var n = FACES[f].n;
+                    facesHTML += '<div class="cube-face cube-face--' + cls + '" style="--hs:' + hs + 'px">' +
+                        faceDotsHTML(n) + '</div>';
+                }
+
+                return '<div class="die" style="width:' + size + 'px">' +
+                    '<div class="die-scene" style="width:' + size + 'px;height:' + size + 'px">' +
+                    '<div class="die-preserve-3d ' + (rolling ? "anim-throw" : "") + '" style="' +
+                    (rolling ? '--dir:' + dir + ';animation-delay:' + delay + 'ms;' : '') + 'width:' + size +
+                    'px;height:' + size + 'px">' +
+                    '<div class="die-preserve-3d ' + (rolling ? "anim-spin" : "") + '" style="' +
+                    (rolling ? 'animation-delay:' + delay + 'ms;' : '') + '">' +
+                    '<div class="die-preserve-3d ' + (rolling ? "anim-orient" : "") + '" style="' +
+                    (rolling ? 'animation-delay:' + delay + 'ms;' : '') + 'width:' + size + 'px;height:' + size +
+                    'px;--frx:' + rx + 'deg;--fry:' + ry + 'deg">' +
+                    '<div class="cube" style="' + cubeStyle + '">' +
+                    facesHTML +
+                    '</div></div></div></div></div>' +
+                    '<div class="ground-shadow ' + (rolling ? "anim-shadow" : "") + '" style="width:' + (size * 0.55) +
+                    'px;height:' + (size * 0.07) + 'px;margin-top:' + (-size * 0.03) + 'px;' +
+                    (rolling ? 'animation-delay:' + delay + 'ms;' : '') + '"></div>' +
+                    '</div>';
+            }
+
+            function renderDice() {
+                var size = dieSize();
+                var html = '';
+                for (var i = 0; i < state.dice.length; i++) {
+                    html += dieHTML(state.dice[i], i, size, state.rolling, state.snapshotting);
+                }
+                gridEl.innerHTML = html;
+                sumBadge.textContent = state.dice.reduce(function(a, b) { return a + b; }, 0);
+            }
+
+            function renderSeg() {
+                var btns = segEl.querySelectorAll("button");
+                for (var i = 0; i < btns.length; i++) {
+                    var b = btns[i];
+                    var n = parseInt(b.dataset.count, 10);
+                    b.classList.toggle("active", n === state.count);
+                }
+            }
+
+            function plural(n) {
+                if (n === 1) return "бросок";
+                if (n >= 2 && n <= 4) return "броска";
+                return "бросков";
+            }
+
+            function renderHistory() {
+                if (state.history.length === 0) {
+                    historyEmpty.style.display = "";
+                    var rows = historyBody.querySelectorAll(".hrow");
+                    for (var i = 0; i < rows.length; i++) rows[i].remove();
+                    historySub.textContent = "пока пусто";
+                    btnClear.style.display = "none";
+                    return;
+                }
+                historyEmpty.style.display = "none";
+                btnClear.style.display = "";
+                historySub.textContent = state.history.length + " " + plural(state.history.length);
+
+                var existing = historyBody.querySelectorAll(".hrow");
+                for (var i = 0; i < existing.length; i++) existing[i].remove();
+
+                for (var j = 0; j < state.history.length; j++) {
+                    var item = state.history[j];
+                    var row = document.createElement("div");
+                    row.className = "hrow fade-in-up";
+                    var chips = '';
+                    for (var k = 0; k < item.values.length; k++) {
+                        chips += '<span class="chip">' + item.values[k] + '</span>';
+                    }
+                    row.innerHTML =
+                        '<div class="hrow-left">' +
+                        '<div class="chip-row">' + chips + '</div>' +
+                        '<span class="hrow-meta">#' + item.id + ' · ' + item.timestamp + '</span>' +
+                        '</div>' +
+                        '<div class="hrow-sum">Σ ' + item.total + '</div>';
+                    historyBody.appendChild(row);
+                }
+            }
+
+            // ── Actions ───────────────────────────────────────────────────
+            function roll() {
+                if (state.rolling) return;
+                var finalValues = [];
+                for (var i = 0; i < state.count; i++) {
+                    finalValues.push(1 + Math.floor(Math.random() * 6));
+                }
+                state.dice = finalValues;
+                state.rolling = true;
+                btnRoll.disabled = true;
+                btnRoll.classList.add("rolling");
+                btnSnapshot.disabled = true;
+                btnRollText.textContent = "Летят…";
+                rollIcon.classList.add("spin-icon");
+                rollIcon.classList.remove("hover-rotate");
+
+                // haptic
+                var tg = window._tg;
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
+
+                renderDice();
+
+                window.setTimeout(function() {
+                    state.rolling = false;
+                    btnRoll.disabled = false;
+                    btnSnapshot.disabled = false;
+                    btnRoll.classList.remove("rolling");
+                    btnRollText.textContent = "Бросить";
+                    rollIcon.classList.remove("spin-icon");
+                    rollIcon.classList.add("hover-rotate");
+
+                    if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+                    if (tg) tg.sendData(JSON.stringify({ action: "roll", values: finalValues }));
+
+                    var total = finalValues.reduce(function(a, b) { return a + b; }, 0);
+                    var now = new Date();
+                    var ts = now.toLocaleTimeString("ru-RU", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                    });
+                    state.counter += 1;
+                    state.history.unshift({
+                        id: state.counter,
+                        timestamp: ts,
+                        values: finalValues,
+                        total: total,
+                    });
+                    if (state.history.length > 50) state.history.length = 50;
+
+                    renderDice();
+                    renderHistory();
+                }, ROLL_DURATION);
+            }
+
+            function changeCount(n) {
+                if (state.rolling || n === state.count) return;
+                var tg = window._tg;
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+
+                state.count = n;
+                if (state.dice.length < n) {
+                    var add = [];
+                    for (var i = 0; i < n - state.dice.length; i++) {
+                        add.push(1 + Math.floor(Math.random() * 6));
+                    }
+                    state.dice = state.dice.concat(add);
+                } else if (state.dice.length > n) {
+                    state.dice = state.dice.slice(0, n);
+                }
+                renderSeg();
+                renderDice();
+            }
+
+            function clearHistory() {
+                var tg = window._tg;
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+                state.history = [];
+                renderHistory();
+            }
+
+            function showToast(msg) {
+                toastBox.textContent = msg;
+                toastEl.style.display = "";
+                toastBox.style.animation = "none";
+                void toastBox.offsetWidth;
+                toastBox.style.animation = "";
+                window.setTimeout(function() { toastEl.style.display = "none"; }, 2200);
+            }
+
+            // ── Snapshot Logic (Modal Approach) ───────────────────────────
+            function drawToCanvas() {
+                var size = dieSize();
+                var gap = 40;
+                var padding = 60;
+                var n = state.dice.length;
+                var W = padding * 2 + n * size + (n - 1) * gap;
+                var H = 260;
+                var DPR = 2;
+
+                var canvas = document.createElement("canvas");
+                canvas.width = W * DPR;
+                canvas.height = H * DPR;
+                var ctx = canvas.getContext("2d");
+                ctx.scale(DPR, DPR);
+
+                // Background
+                var grad = ctx.createLinearGradient(0, 0, W, H);
+                grad.addColorStop(0, "#faf6ef");
+                grad.addColorStop(1, "#faf6ef");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, W, H);
+
+                // Soft blobs
+                var r1 = ctx.createRadialGradient(80, 40, 0, 80, 40, 80);
+                r1.addColorStop(0, "rgba(124,106,209,0.08)");
+                r1.addColorStop(1, "rgba(124,106,209,0)");
+                ctx.fillStyle = r1;
+                ctx.fillRect(0, 0, W, H);
+                var r2 = ctx.createRadialGradient(W - 80, H - 40, 0, W - 80, H - 40, 100);
+                r2.addColorStop(0, "rgba(210,170,120,0.1)");
+                r2.addColorStop(1, "rgba(210,170,120,0)");
+                ctx.fillStyle = r2;
+                ctx.fillRect(0, 0, W, H);
+
+                // Field card
+                ctx.save();
+                ctx.shadowColor = "rgba(91,75,176,0.15)";
+                ctx.shadowBlur = 40;
+                ctx.shadowOffsetY = 10;
+                ctx.fillStyle = "rgba(255,255,255,0.8)";
+                roundRect(ctx, 20, 20, W - 40, H - 40, 24);
+                ctx.fill();
+                ctx.restore();
+
+                // Dice
+                var totalY = (H - size) / 2;
+                for (var i = 0; i < n; i++) {
+                    var x = padding + i * (size + gap);
+                    drawDieFace(ctx, x, totalY, size, state.dice[i]);
+                }
+
+                // Sum badge
+                var total = state.dice.reduce(function(a, b) { return a + b; }, 0);
+                ctx.save();
+                ctx.font = "600 11px Inter, sans-serif";
+                ctx.fillStyle = "#6b6680";
+                var txt = "Σ " + total;
+                var tw = ctx.measureText(txt).width;
+                var bx = W - 40 - tw - 16;
+                var by = 36;
+                ctx.fillStyle = "rgba(255,255,255,0.9)";
+                roundRect(ctx, bx, by, tw + 16, 22, 11);
+                ctx.fill();
+                ctx.strokeStyle = "#e8dfd1";
+                ctx.stroke();
+                ctx.fillStyle = "#6b6680";
+                ctx.textBaseline = "middle";
+                ctx.fillText("Σ ", bx + 8, by + 11);
+                ctx.fillStyle = "#2d2a44";
+                ctx.font = "600 11px Inter, sans-serif";
+                ctx.fillText(total, bx + 8 + ctx.measureText("Σ ").width, by + 11);
+                ctx.restore();
+
+                return canvas;
+            }
+
+            function roundRect(ctx, x, y, w, h, r) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
+            }
+
+            function drawDieFace(ctx, x, y, size, value) {
+                // Shadow
+                ctx.save();
+                ctx.beginPath();
+                ctx.ellipse(x + size / 2, y + size + size * 0.06, size * 0.275, size * 0.035, 0, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(45,42,68,0.15)";
+                ctx.fill();
+                ctx.restore();
+
+                // Face rounded rect
+                ctx.save();
+                ctx.shadowColor = "rgba(79,70,229,0.15)";
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 10;
+                var g = ctx.createLinearGradient(x, y, x + size, y + size);
+                g.addColorStop(0, "#fffdf7");
+                g.addColorStop(1, "#f5f0e6");
+                ctx.fillStyle = g;
+                ctx.strokeStyle = "#ddd5c4";
+                ctx.lineWidth = 1.5;
+                var r = size * 0.16;
+                roundRect(ctx, x, y, size, size, r);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+
+                // Dots
+                var pad = size * 0.16;
+                var inner = size - pad * 2;
+                var cell = inner / 3;
+                var active = DOT_MAP[value] || DOT_MAP[1];
+                var dotR = cell * 0.39;
+                for (var i = 0; i < 9; i++) {
+                    if (!active.includes(i)) continue;
+                    var row = Math.floor(i / 3);
+                    var col = i % 3;
+                    var cx = x + pad + cell * col + cell / 2;
+                    var cy = y + pad + cell * row + cell / 2;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, dotR, 0, Math.PI * 2);
+                    var dg = ctx.createRadialGradient(cx - dotR * 0.25, cy - dotR * 0.25, 0, cx, cy, dotR);
+                    dg.addColorStop(0, "#443f5c");
+                    dg.addColorStop(1, "#2d2a44");
+                    ctx.fillStyle = dg;
+                    ctx.fill();
+                }
+            }
+
+            function takeSnapshot() {
+                if (state.snapshotBusy || state.rolling) return;
+                state.snapshotBusy = true;
+                var tg = window._tg;
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+                btnSnapshot.disabled = true;
+                btnSnapshotText.textContent = "Сохраняю…";
+
+                try {
+                    state.snapshotting = true;
+                    renderDice();
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            var canvas = drawToCanvas();
+                            var dataUrl = canvas.toDataURL('image/png');
+
+                            var isTelegram = tg && tg.initDataUnsafe && tg.initDataUnsafe.query_id;
+
+                            if (isTelegram) {
+                                // В Telegram показываем модальное окно
+                                currentSnapshotUrl = dataUrl;
+                                modalImg.src = dataUrl;
+                                modal.classList.add('active');
+                                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+                            } else {
+                                // В обычном браузере скачиваем
+                                var link = document.createElement("a");
+                                var stamp = new Date().toISOString().replace(/[:.]/g, "-");
+                                link.download = "dice-" + stamp + ".png";
+                                link.href = dataUrl;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                showToast("Снимок сохранён ✨");
+                                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+                            }
+                        });
+                    });
+                } catch (e) {
+                    console.error(e);
+                    showToast("Не удалось сделать снимок");
+                } finally {
+                    state.snapshotting = false;
+                    state.snapshotBusy = false;
+                    renderDice();
+                    btnSnapshot.disabled = false;
+                    btnSnapshotText.textContent = "Снимок";
+                }
+            }
+
+            // Modal Handlers
+            var currentSnapshotUrl = "";
+            modalCloseBtn.addEventListener('click', function() {
+                modal.classList.remove('active');
+            });
+            modalSaveBtn.addEventListener('click', function() {
+                if (currentSnapshotUrl) {
+                    window.open(currentSnapshotUrl, '_blank');
+                }
+                modal.classList.remove('active');
+            });
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+
+            // ── Events ────────────────────────────────────────────────────
+            var segBtns = segEl.querySelectorAll("button");
+            for (var i = 0; i < segBtns.length; i++) {
+                segBtns[i].addEventListener("click", function() {
+                    changeCount(parseInt(this.dataset.count, 10));
+                });
+            }
+            btnRoll.addEventListener("click", roll);
+            btnSnapshot.addEventListener("click", takeSnapshot);
+            btnClear.addEventListener("click", clearHistory);
+            window.addEventListener("resize", function() { if (!state.rolling) renderDice(); });
+
+            // ── Initial render ────────────────────────────────────────────
+            renderSeg();
+            renderDice();
+            renderHistory();
+            document.getElementById('dice-year').textContent = new Date().getFullYear();
+        }
+    </script>
+
+    <!-- ===== Код расклада (React) ===== -->
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useCallback } = React;
+
+        const GRID_OPTIONS = [
+            { label: '4 × 3 (12 ячеек)', value: '4x3', w: 4, h: 3 },
+            { label: '3 × 4 (12 ячеек)', value: '3x4', w: 3, h: 4 },
+            { label: '2 × 2 (4 ячейки)', value: '2x2', w: 2, h: 2 },
+            { label: '1 × 5 (5 ячеек)', value: '1x5', w: 5, h: 1 },
+            { label: '5 × 1 (5 ячеек)', value: '5x1', w: 1, h: 5 },
+            { label: '3 × 3 (9 ячеек)', value: '3x3', w: 3, h: 3 },
+        ];
+
+        const CARD_BACK_URL = 'https://raw.githubusercontent.com/logistickshell-ops/rasklad/main/rub.jpg';
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            const randomValues = new Uint32Array(arr.length);
+            window.crypto.getRandomValues(randomValues);
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = randomValues[i] % (i + 1);
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function CardBack({ src, cardId, small }) {
+            return React.createElement('div', {
+                className: 'w-full h-full card-back-rainbow-fallback rounded-lg border-2 border-yellow-200/50 shadow-inner overflow-hidden flex items-center justify-center relative'
+            }, [
+                React.createElement('img', {
+                    key: 'img',
+                    src,
+                    alt: 'Card Back',
+                    className: 'absolute inset-0 w-full h-full object-cover rounded-lg'
+                }),
+                React.createElement('div', {
+                    key: 'num',
+                    className: 'w-full h-full flex flex-col justify-end items-start pl-1 pb-1 absolute inset-0 pointer-events-none'
+                }, React.createElement('div', {
+                    className: (small ? 'w-6 h-9' : 'w-8 h-12') + ' border border-white/30 rounded flex items-center justify-center'
+                }, React.createElement('span', {
+                    className: 'text-yellow-300 ' + (small ? 'text-sm' : 'text-base') + ' font-bold'
+                }, String(cardId + 1))))
+            ]);
+        }
+
+        function CardFront({ card, small }) {
+            let borderClass = 'border-gray-200 text-gray-400';
+            if (card.type === 'win') borderClass = 'border-green-400 text-green-600 bg-green-50';
+            if (card.type === 'burn') borderClass = 'border-red-400 text-red-600 bg-red-50';
+
+            return React.createElement('div', {
+                className: 'w-full h-full rounded-lg border-2 flex items-center justify-center bg-white shadow-sm overflow-hidden ' +
+                    borderClass
+            }, React.createElement('span', {
+                className: (small ? 'text-[9px]' : 'text-[10px]') + ' font-bold text-center leading-tight px-1 break-words'
+            }, card.label));
+        }
+
+        function LayoutApp() {
+            const [winCount, setWinCount] = useState(2);
+            const [burnCount, setBurnCount] = useState(1);
+            const [gridValue, setGridValue] = useState('4x3');
+            const [winText, setWinText] = useState('');
+            const [burnText, setBurnText] = useState('');
+            const [cards, setCards] = useState([]);
+            const [isAllVisible, setIsAllVisible] = useState(false);
+            const [cardBackSrc, setCardBackSrc] = useState(CARD_BACK_URL);
+            const [previewImage, setPreviewImage] = useState(null);
+            const [isShooting, setIsShooting] = useState(false);
+
+            const gridConfig = useMemo(() => GRID_OPTIONS.find(o => o.value === gridValue), [gridValue]);
+            const totalSpecial = winCount + burnCount;
+
+            const generateLayout = useCallback(() => {
+                const totalCells = gridConfig.w * gridConfig.h;
+                if (totalSpecial > totalCells) {
+                    alert('Ошибка: Карт больше, чем ячеек!');
+                    return;
+                }
+
+                const newCards = new Array(totalCells).fill(null).map((_, i) => ({
+                    id: i,
+                    type: 'neutral',
+                    isOpen: false,
+                    label: '·'
+                }));
+
+                const indices = shuffleArray([...Array(totalCells).keys()]);
+                const winIndices = indices.slice(0, winCount);
+                const burnIndices = indices.slice(winCount, winCount + burnCount);
+
+                const winLabels = winText.split(',').map(s => s.trim()).filter(Boolean);
+                const burnLabels = burnText.split(',').map(s => s.trim()).filter(Boolean);
+
+                winIndices.forEach((idx, i) => {
+                    newCards[idx].type = 'win';
+                    newCards[idx].label = winLabels[i] || '✦';
+                });
+
+                burnIndices.forEach((idx, i) => {
+                    newCards[idx].type = 'burn';
+                    newCards[idx].label = burnLabels[i] || '🔥';
+                });
+
+                setCards(newCards);
+                setIsAllVisible(false);
+            }, [gridConfig, winCount, burnCount, winText, burnText, totalSpecial]);
+
+            // Первый расклад при загрузке
+            useEffect(() => { generateLayout(); }, []);
+
+            // Смена сетки
+            useEffect(() => { generateLayout(); }, [gridValue]);
+
+            // Авто-перегенерация при смене числа карт
+            useEffect(() => { generateLayout(); }, [winCount, burnCount]);
+
+            // Загружаем рубашку как base64 — нет CORS проблем
+            useEffect(() => {
+                fetch(CARD_BACK_URL)
+                    .then(r => r.blob())
+                    .then(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            if (typeof reader.result === 'string') setCardBackSrc(reader.result);
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch(() => {});
+            }, []);
+
+            const handleCardClick = (id) => {
+                setCards(prev => prev.map(c => c.id === id ? { ...c, isOpen: !c.isOpen } : c));
+            };
+
+            const downloadDataUrl = (dataUrl) => {
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = 'rasklad-' + Date.now() + '.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const takeScreenshot = async () => {
+                const element = document.getElementById('screenshot-area');
+                if (!element || isShooting) return;
+
+                setIsShooting(true);
+                // ждём два кадра чтобы React отрисовал
+                await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+                try {
+                    const canvas = await html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+                    const dataUrl = canvas.toDataURL('image/png');
+                    downloadDataUrl(dataUrl);
+                    setPreviewImage(dataUrl);
+                } catch (err) {
+                    console.error('Ошибка скриншота:', err);
+                    alert('Не удалось создать снимок. Попробуйте ещё раз.');
+                } finally {
+                    setIsShooting(false);
+                }
+            };
+
+            return React.createElement('div', {
+                className: 'max-w-md mx-auto p-4 flex flex-col items-center'
+            }, [
+                // Шапка (вне зоны скриншота)
+                React.createElement('header', {
+                    key: 'header',
+                    className: 'glass border-b border-white/10 w-full mb-4'
+                }, React.createElement('div', {
+                    className: 'max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'
+                }, [
+                    React.createElement('div', {
+                        key: 'left',
+                        className: 'flex items-center gap-3'
+                    }, [
+                        React.createElement('div', {
+                            key: 'icon',
+                            className: 'w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-sky-300 flex items-center justify-center shadow-lg shadow-violet-400/25 ring-1 ring-white/40'
+                        }, React.createElement('svg', {
+                            viewBox: '0 0 24 24',
+                            fill: 'none',
+                            stroke: 'currentColor',
+                            strokeWidth: '1.6',
+                            strokeLinejoin: 'round',
+                            className: 'w-5 h-5 text-white'
+                        }, React.createElement('path', {
+                            d: 'M12 3 14.2 9.8 21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2L12 3Z',
+                            fill: 'currentColor',
+                            fillOpacity: '0.15'
+                        }))),
+                        React.createElement('div', { key: 'text' }, [
+                            React.createElement('h1', {
+                                className: 'text-xl font-bold text-slate-700 tracking-tight'
+                            }, 'Светлый расклад'),
+                            React.createElement('p', {
+                                className: 'text-xs text-slate-500'
+                            }, 'интуитивные подсказки')
+                        ])
+                    ]),
+                    React.createElement('button', {
+                        key: 'back',
+                        onClick: () => window.showPage('home'),
+                        className: 'bg-white/30 backdrop-blur rounded-full p-2 shadow-sm border border-white/40 hover:bg-white/50 transition-colors text-slate-600',
+                        'aria-label': 'Назад'
+                    }, React.createElement('svg', {
+                        viewBox: '0 0 24 24',
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        strokeWidth: '2',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        className: 'w-5 h-5'
+                    }, React.createElement('path', { d: 'M19 12H5M12 19l-7-7 7-7' })))
+                ])),
+
+                // Область для скриншота (только карты + дата)
+                React.createElement('div', { key: 'screenshot', id: 'screenshot-area', className: 'w-full flex flex-col items-center pb-2' }, [
+                    // Сетка карт
+                    React.createElement('div', {
+                        key: 'grid',
+                        className: 'w-full bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/60 mb-2 relative overflow-hidden'
+                    }, [
+                        React.createElement('div', {
+                            key: 'inner-grid',
+                            className: 'grid gap-3 transition-all duration-300 mx-auto',
+                            style: {
+                                gridTemplateColumns: 'repeat(' + gridConfig.w + ', 52px)',
+                                justifyContent: 'center'
+                            }
+                        }, cards.map(card =>
+                            React.createElement('div', {
+                                key: card.id,
+                                className: 'w-[52px] h-[72px] cursor-pointer',
+                                onClick: () => handleCardClick(card.id)
+                            }, !(card.isOpen || isAllVisible) ?
+                                React.createElement(CardBack, { src: cardBackSrc, cardId: card.id }) :
+                                React.createElement(CardFront, { card })
+                            )
+                        )),
+                    ]),
+
+                    // Дата под сеткой
+                    React.createElement('div', {
+                        key: 'date',
+                        className: 'text-center text-[9px] text-gray-300 tracking-widest uppercase'
+                    }, 'Светлый Расклад • ' + new Date().toLocaleDateString('ru-RU'))
+                ]),
+
+                // Легенда
+                React.createElement('div', {
+                    key: 'legend',
+                    className: 'flex justify-between w-full gap-2 mb-6 mt-4 text-[9px] font-medium uppercase tracking-tighter'
+                }, [
+                    React.createElement('div', { key: 'w', className: 'flex-1 bg-white/60 p-2 rounded-xl border border-white/50 flex flex-col items-center' }, [
+                        React.createElement('span', { key: 'l', className: 'text-blue-400 mb-1' }, '✦ —'),
+                        React.createElement('span', { key: 't', className: 'text-gray-500' }, 'выигрышная карта')
+                    ]),
+                    React.createElement('div', { key: 'b', className: 'flex-1 bg-white/60 p-2 rounded-xl border border-white/50 flex flex-col items-center' }, [
+                        React.createElement('span', { key: 'l', className: 'text-red-400 mb-1' }, '🔥 — карта'),
+                        React.createElement('span', { key: 't', className: 'text-gray-500' }, 'сжигания')
+                    ]),
+                    React.createElement('div', { key: 'n', className: 'flex-1 bg-white/60 p-2 rounded-xl border border-white/50 flex flex-col items-center' }, [
+                        React.createElement('span', { key: 'l', className: 'text-gray-300 mb-1' }, '· — нейтральная'),
+                        React.createElement('span', { key: 't', className: 'text-gray-500' }, 'карта')
+                    ])
+                ]),
+
+                // Панель управления
+                React.createElement('div', {
+                    key: 'controls',
+                    className: 'w-full bg-white/70 backdrop-blur rounded-3xl p-6 shadow-lg border border-white flex flex-col gap-5'
+                }, [
+                    // Параметры
+                    React.createElement('div', { key: 'params', className: 'flex justify-between items-start' }, [
+                        React.createElement('div', { key: 'text' }, [
+                            React.createElement('h2', { className: 'text-gray-700 font-bold text-sm' }, 'Параметры расклада'),
+                            React.createElement('p', { className: 'text-[9px] text-gray-400 leading-tight' }, 'Выигрышные и сжигающие — разные карты.')
+                        ]),
+                        React.createElement('div', { className: 'bg-white border border-purple-100 rounded-xl px-3 py-2 text-center shadow-sm min-w-[60px]' }, [
+                            React.createElement('div', { className: 'text-[7px] text-purple-300 uppercase font-black mb-1' }, 'ОТКРЫВАЕТСЯ'),
+                            React.createElement('div', { className: 'text-lg font-bold text-gray-700' }, String(totalSpecial))
+                        ])
+                    ]),
+
+                    // Счётчики
+                    React.createElement('div', { key: 'win' }, [
+                        React.createElement('label', { className: 'text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block' }, 'ВЫИГРЫШНЫЕ'),
+                        React.createElement('div', { className: 'flex items-center bg-white rounded-xl border border-gray-100 px-3 py-1 shadow-sm' }, [
+                            React.createElement('button', { onClick: () => setWinCount(Math.max(0, winCount - 1)), className: 'text-gray-300 p-2 hover:text-purple-500 text-lg leading-none' }, '－'),
+                            React.createElement('input', { readOnly: true, value: winCount, className: 'flex-1 text-center font-bold text-gray-700 bg-transparent outline-none' }),
+                            React.createElement('button', { onClick: () => setWinCount(winCount + 1), className: 'text-gray-300 p-2 hover:text-purple-500 text-lg leading-none' }, '＋'),
+                            React.createElement('span', { className: 'ml-2' }, '💎')
+                        ])
+                    ]),
+
+                    React.createElement('div', { key: 'burn' }, [
+                        React.createElement('label', { className: 'text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block' }, 'СЖИГАЮЩИЕ'),
+                        React.createElement('div', { className: 'flex items-center bg-white rounded-xl border border-gray-100 px-3 py-1 shadow-sm' }, [
+                            React.createElement('button', { onClick: () => setBurnCount(Math.max(0, burnCount - 1)), className: 'text-gray-300 p-2 hover:text-purple-500 text-lg leading-none' }, '－'),
+                            React.createElement('input', { readOnly: true, value: burnCount, className: 'flex-1 text-center font-bold text-gray-700 bg-transparent outline-none' }),
+                            React.createElement('button', { onClick: () => setBurnCount(burnCount + 1), className: 'text-gray-300 p-2 hover:text-purple-500 text-lg leading-none' }, '＋'),
+                            React.createElement('span', { className: 'ml-2' }, '🔥')
+                        ])
+                    ]),
+
+                    // Сетка
+                    React.createElement('div', { key: 'layout' }, [
+                        React.createElement('label', { className: 'text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block' }, 'РАСКЛАД'),
+                        React.createElement('select', {
+                            value: gridValue,
+                            onChange: e => setGridValue(e.target.value),
+                            className: 'w-full bg-white rounded-xl border border-gray-100 px-4 py-2 text-sm font-medium text-gray-600 shadow-sm outline-none'
+                        }, GRID_OPTIONS.map(o =>
+                            React.createElement('option', { key: o.value, value: o.value }, o.label)
+                        ))
+                    ]),
+
+                    // Текстовые поля
+                    React.createElement('div', { key: 'texts', className: 'grid grid-cols-2 gap-3' }, [
+                        React.createElement('div', { key: 'win-text' }, [
+                            React.createElement('label', { className: 'text-[9px] font-black text-green-500 uppercase mb-1 block' }, 'ТЕКСТ (ВЫИГРЫШ)'),
+                            React.createElement('input', {
+                                placeholder: 'напр. слива, яблоко',
+                                value: winText,
+                                onChange: e => setWinText(e.target.value),
+                                className: 'w-full bg-green-50/30 rounded-xl border border-green-100 px-3 py-2 text-[10px] outline-none'
+                            })
+                        ]),
+                        React.createElement('div', { key: 'burn-text' }, [
+                            React.createElement('label', { className: 'text-[9px] font-black text-red-500 uppercase mb-1 block' }, 'ТЕКСТ (СЖИГАНИЕ)'),
+                            React.createElement('input', {
+                                placeholder: 'напр. огонь',
+                                value: burnText,
+                                onChange: e => setBurnText(e.target.value),
+                                className: 'w-full bg-red-50/30 rounded-xl border border-red-100 px-3 py-2 text-[10px] outline-none'
+                            })
+                        ])
+                    ]),
+
+                    // Кнопки
+                    React.createElement('div', { key: 'buttons', className: 'grid grid-cols-2 gap-3 mt-2' }, [
+                        React.createElement('button', {
+                            onClick: generateLayout,
+                            className: 'bg-blue-50 text-blue-600 rounded-xl py-3 text-[10px] font-bold border border-blue-100 hover:bg-blue-100 transition-colors active:scale-95'
+                        }, '↺ Новый расклад'),
+                        React.createElement('button', {
+                            onClick: () => setIsAllVisible(true),
+                            className: 'bg-yellow-50 text-yellow-600 rounded-xl py-3 text-[10px] font-bold border border-yellow-100 hover:bg-yellow-100 transition-colors active:scale-95'
+                        }, '👁 Открыть всё'),
+                        React.createElement('button', {
+                            onClick: () => { setIsAllVisible(false);
+                                setCards(c => c.map(k => ({ ...k, isOpen: false }))); },
+                            className: 'bg-white text-gray-400 rounded-xl py-3 text-[10px] font-bold border border-gray-100 hover:bg-gray-50 transition-colors active:scale-95'
+                        }, '☀️ Скрыть'),
+                        React.createElement('button', {
+                            onClick: takeScreenshot,
+                            disabled: isShooting,
+                            className: 'bg-cyan-50 text-cyan-600 rounded-xl py-3 text-[10px] font-bold border border-cyan-100 hover:bg-cyan-100 transition-colors active:scale-95 disabled:opacity-50'
+                        }, isShooting ? '⏳ Снимок…' : '📷 Снимок')
+                    ]),
+
+                    // Статистика
+                    React.createElement('div', { key: 'stats', className: 'pt-4 mt-2 border-t border-gray-50 flex justify-between items-center' }, [
+                        React.createElement('div', { className: 'text-[10px] text-gray-400' }, [
+                            'Открыто ',
+                            React.createElement('span', { className: 'font-bold' }, String(cards.filter(c => c.isOpen).length)),
+                            ' из ' + cards.length
+                        ]),
+                        React.createElement('div', { className: 'bg-gray-50 rounded-lg px-2 py-1 text-[10px] text-gray-400 font-mono tracking-tighter' }, gridConfig.w + ' × ' + gridConfig.h)
+                    ]),
+
+                    // Нижний блок
+                    React.createElement('div', { key: 'bottom', className: 'flex gap-2' }, [
+                        React.createElement('div', { className: 'flex-1 bg-green-50 text-green-500 rounded-full py-1 text-center text-[10px] font-bold' }, '💎 ' + winCount),
+                        React.createElement('div', { className: 'flex-1 bg-red-50 text-red-500 rounded-full py-1 text-center text-[10px] font-bold' }, '🔥 ' + burnCount),
+                        React.createElement('div', { className: 'flex-1 bg-blue-50 text-blue-500 rounded-full py-1 text-center text-[10px] font-bold' }, 'Ф ' + totalSpecial)
+                    ])
+                ]),
+
+                // Превью модалка
+                previewImage ? React.createElement('div', {
+                    key: 'preview',
+                    className: 'fixed inset-0 bg-black/80 z-[2000] flex flex-col items-center justify-center p-4',
+                    onClick: () => setPreviewImage(null)
+                }, React.createElement('div', {
+                    className: 'bg-white rounded-3xl p-5 max-w-full flex flex-col items-center',
+                    onClick: e => e.stopPropagation()
+                }, [
+                    React.createElement('h3', { key: 'title', className: 'text-gray-800 font-bold mb-3 text-sm' }, 'Снимок готов! 📸'),
+                    React.createElement('img', {
+                        key: 'img',
+                        src: previewImage,
+                        alt: 'Снимок расклада',
+                        className: 'rounded-2xl max-w-full max-h-[55vh] border border-gray-100 shadow-sm'
+                    }),
+                    React.createElement('p', { key: 'hint', className: 'text-[9px] text-gray-400 mt-2 text-center max-w-[240px]' },
+                        'Если файл не сохранился — нажмите кнопку ниже или зажмите картинку.'
+                    ),
+                    React.createElement('div', { key: 'btns', className: 'flex gap-3 mt-4 w-full' }, [
+                        React.createElement('a', {
+                            href: previewImage,
+                            download: 'rasklad-' + Date.now() + '.png',
+                            className: 'flex-1 bg-green-500 text-white rounded-xl py-3 font-bold text-xs text-center hover:bg-green-600 transition-colors active:scale-95'
+                        }, '💾 Сохранить'),
+                        React.createElement('button', {
+                            onClick: () => setPreviewImage(null),
+                            className: 'bg-gray-100 text-gray-500 rounded-xl px-6 py-3 font-bold text-xs hover:bg-gray-200 transition-colors'
+                        }, 'Готово')
+                    ])
+                ])) : null
+            ]);
+        }
+    </script>
+
+    <!-- ===== Код рулетки (React) ===== -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        const STORAGE_KEY = "spinwheel-participants";
+        const WHEEL_COLORS = [
+            "#FCA5A5", "#FDBA74", "#FDE68A", "#86EFAC",
+            "#67E8F9", "#93C5FD", "#C4B5FD", "#F0ABFC",
+            "#F9A8D4", "#A7F3D0", "#BAE6FD", "#DDD6FE",
+            "#FECACA", "#FED7AA", "#D9F99D", "#BFDBFE"
+        ];
+
+        const CANVAS_SIZE = 420;
+        const OUTER_RADIUS = 190;
+        const INNER_RADIUS = 40;
+
+        function getColorForIndex(index) {
+            return WHEEL_COLORS[index % WHEEL_COLORS.length];
+        }
+
+        function generateId() {
+            return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substr(2, 9);
+        }
+
+        function useTelegramMiniApp() {
+            const tgRef = useRef(null);
+
+            useEffect(() => {
+                if (window.Telegram?.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tgRef.current = tg;
+                    tg.ready();
+                    tg.expand();
+                    try {
+                        tg.setHeaderColor("#c4b5fd");
+                        tg.setBackgroundColor("#ede9fe");
+                    } catch (e) {}
+                }
+            }, []);
+
+            const hapticSuccess = useCallback(() => {
+                tgRef.current?.HapticFeedback?.notificationOccurred("success");
+            }, []);
+
+            return { hapticSuccess };
+        }
+
+        function loadItems() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                const parsed = saved ? JSON.parse(saved) : [];
+                if (!Array.isArray(parsed)) return [];
+                return parsed
+                    .map((item, index) => ({
+                        id: typeof item.id === "string" ? item.id : generateId(),
+                        label: typeof item.label === "string" ? item.label : "",
+                        color: getColorForIndex(index),
+                    }))
+                    .filter(item => item.label.trim().length > 0);
+            } catch {
+                return [];
+            }
+        }
+
+        function SpinWheel({ items, onSpinEnd, disabled }) {
+            const canvasRef = useRef(null);
+            const containerRef = useRef(null);
+            const [isSpinning, setIsSpinning] = useState(false);
+            const rotationRef = useRef(0);
+            const animFrameRef = useRef(0);
+
+            const drawWheel = useCallback((rotation) => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext("2d");
+                if (!ctx) return;
+
+                const w = canvas.width;
+                const h = canvas.height;
+                const cx = w / 2;
+                const cy = h / 2;
+
+                ctx.clearRect(0, 0, w, h);
+                if (items.length === 0) return;
+
+                const arcSize = (2 * Math.PI) / items.length;
+
+                ctx.save();
+                ctx.shadowColor = "rgba(124,58,237,0.16)";
+                ctx.shadowBlur = 24;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 4;
+
+                items.forEach((item, i) => {
+                    const startAngle = rotation + i * arcSize - Math.PI / 2;
+                    const endAngle = startAngle + arcSize;
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, OUTER_RADIUS, startAngle, endAngle);
+                    ctx.closePath();
+
+                    ctx.fillStyle = item.color;
+                    ctx.fill();
+
+                    ctx.strokeStyle = "rgba(255,255,255,0.65)";
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                });
+
+                ctx.restore();
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, INNER_RADIUS, 0, 2 * Math.PI);
+                ctx.fillStyle = "rgba(255,255,255,0.72)";
+                ctx.fill();
+
+                ctx.save();
+                const fontSize = Math.min(14, Math.max(9, 160 / items.length));
+                ctx.font = `bold ${fontSize}px Inter, -apple-system, BlinkMacSystemFont, sans-serif`;
+                ctx.textAlign = "left";
+                ctx.textBaseline = "middle";
+
+                items.forEach((item, i) => {
+                    const midAngle = rotation + (i + 0.5) * arcSize - Math.PI / 2;
+                    const innerPadding = 34;
+                    const labelRadius = INNER_RADIUS + innerPadding;
+
+                    ctx.save();
+                    ctx.translate(cx + Math.cos(midAngle) * labelRadius, cy + Math.sin(midAngle) * labelRadius);
+                    ctx.rotate(midAngle);
+
+                    ctx.shadowColor = "rgba(255,255,255,0.8)";
+                    ctx.shadowBlur = 4;
+                    ctx.fillStyle = "#475569";
+
+                    let displayLabel = item.label;
+                    const maxWidth = OUTER_RADIUS - labelRadius - 15;
+                    if (ctx.measureText(displayLabel).width > maxWidth) {
+                        while (ctx.measureText(displayLabel + "...").width > maxWidth && displayLabel.length > 0) {
+                            displayLabel = displayLabel.slice(0, -1);
+                        }
+                        displayLabel += "...";
+                    }
+
+                    ctx.fillText(displayLabel, 0, 0);
+                    ctx.restore();
+                });
+
+                ctx.restore();
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, OUTER_RADIUS + 4, 0, 2 * Math.PI);
+                ctx.strokeStyle = "rgba(255,255,255,0.5)";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }, [items]);
+
+            useEffect(() => {
+                drawWheel(rotationRef.current);
+            }, [items, drawWheel]);
+
+            useEffect(() => {
+                const updateSize = () => {
+                    const container = containerRef.current;
+                    const canvas = canvasRef.current;
+                    if (!container || !canvas) return;
+
+                    const containerWidth = container.clientWidth;
+                    const maxSize = Math.min(containerWidth - 32, CANVAS_SIZE);
+
+                    canvas.style.width = `${maxSize}px`;
+                    canvas.style.height = `${maxSize}px`;
+
+                    drawWheel(rotationRef.current);
+                };
+
+                updateSize();
+                window.addEventListener("resize", updateSize);
+                return () => window.removeEventListener("resize", updateSize);
+            }, [drawWheel]);
+
+            const getWinnerIndex = useCallback((rotation) => {
+                if (items.length === 0) return -1;
+                const arcSize = (2 * Math.PI) / items.length;
+                const normalizedRotation = ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+                const position = Math.ceil(normalizedRotation / arcSize);
+                return (items.length - position) % items.length;
+            }, [items.length]);
+
+            const spin = useCallback(() => {
+                if (isSpinning || disabled || items.length < 2) return;
+
+                setIsSpinning(true);
+
+                const targetSegment = Math.floor(Math.random() * items.length);
+                const arcSize = (2 * Math.PI) / items.length;
+                const targetRotation = -(targetSegment + 0.5) * arcSize;
+                const extraRotations = 5 + Math.floor(Math.random() * 6);
+                const finalRotation = rotationRef.current + extraRotations * 2 * Math.PI + (targetRotation - (rotationRef.current % (2 * Math.PI)));
+
+                const startRotation = rotationRef.current;
+                const totalRotation = finalRotation - startRotation;
+                const duration = 4000 + Math.random() * 1000;
+                const startTime = performance.now();
+
+                const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+                const animate = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easedProgress = easeOutCubic(progress);
+
+                    rotationRef.current = startRotation + totalRotation * easedProgress;
+                    drawWheel(rotationRef.current);
+
+                    if (progress < 1) {
+                        animFrameRef.current = requestAnimationFrame(animate);
+                    } else {
+                        rotationRef.current = finalRotation;
+                        drawWheel(finalRotation);
+                        setIsSpinning(false);
+
+                        const winnerIndex = getWinnerIndex(finalRotation);
+                        const winner = items[winnerIndex];
+                        onSpinEnd?.(winner);
+                    }
+                };
+
+                animFrameRef.current = requestAnimationFrame(animate);
+            }, [isSpinning, disabled, items, drawWheel, onSpinEnd, getWinnerIndex]);
+
+            useEffect(() => {
+                return () => {
+                    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+                };
+            }, []);
+
+            return React.createElement('div', {
+                ref: containerRef,
+                className: "relative w-full flex items-center justify-center"
+            }, [
+                React.createElement('canvas', {
+                    key: 'canvas',
+                    ref: canvasRef,
+                    width: CANVAS_SIZE,
+                    height: CANVAS_SIZE,
+                    className: "max-w-full h-auto"
+                }),
+                React.createElement('div', {
+                    key: 'pointer',
+                    className: "absolute top-1 left-1/2 -translate-x-1/2 -translate-y-1 z-10 pointer-events-none"
+                }, React.createElement('svg', {
+                    width: 32,
+                    height: 28,
+                    viewBox: "0 0 32 28",
+                    fill: "none",
+                    className: "drop-shadow-lg"
+                }, [
+                    React.createElement('defs', { key: 'defs' },
+                        React.createElement('filter', {
+                            id: "pointer-shadow",
+                            x: "-20%",
+                            y: "-20%",
+                            width: "140%",
+                            height: "140%"
+                        }, React.createElement('feDropShadow', {
+                            dx: 0,
+                            dy: 2,
+                            stdDeviation: 3,
+                            floodOpacity: 0.4
+                        }))
+                    ),
+                    React.createElement('path', {
+                        key: 'path',
+                        d: "M16 28L0 0H32L16 28Z",
+                        fill: "#FDE68A",
+                        stroke: "#fff",
+                        strokeWidth: 2,
+                        filter: "url(#pointer-shadow)"
+                    })
+                ])),
+                React.createElement('button', {
+                    key: 'button',
+                    onClick: spin,
+                    disabled: isSpinning || disabled || items.length < 2,
+                    className: `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
+                               w-14 h-14 sm:w-16 sm:h-16 rounded-full
+                               bg-gradient-to-br from-violet-400 to-sky-400
+                               hover:from-violet-300 hover:to-sky-300
+                               disabled:from-slate-300 disabled:to-slate-400
+                               text-white font-bold text-xs sm:text-sm tracking-wider uppercase
+                               shadow-lg shadow-violet-500/25
+                               disabled:shadow-slate-400/20
+                               transition-all duration-200
+                               active:scale-95
+                               border-2 border-white/30
+                               flex items-center justify-center`
+                }, isSpinning ? React.createElement('span', { className: "animate-pulse" }, "...") : "SPIN")
+            ]);
+        }
+
+        function WinnerModal({ winner, onClose }) {
+            useEffect(() => {
+                if (!winner) return;
+                const handleEsc = (e) => {
+                    if (e.key === "Escape") onClose();
+                };
+                window.addEventListener("keydown", handleEsc);
+                return () => window.removeEventListener("keydown", handleEsc);
+            }, [winner, onClose]);
+
+            if (!winner) return null;
+
+            return React.createElement('div', {
+                className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm",
+                onClick: onClose
+            }, React.createElement('div', {
+                className: "glass-strong rounded-3xl p-8 sm:p-10 max-w-sm w-full text-center",
+                style: { animation: "modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards" },
+                onClick: (e) => e.stopPropagation()
+            }, [
+                React.createElement('div', {
+                    key: 'icon',
+                    className: "mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/55 text-violet-500 shadow-lg shadow-violet-300/25"
+                }, React.createElement('svg', {
+                    className: "h-7 w-7",
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    stroke: "currentColor",
+                    strokeWidth: 2
+                }, React.createElement('path', {
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    d: "M5 13l4 4L19 7"
+                }))),
+                React.createElement('h2', {
+                    key: 'title',
+                    className: "text-2xl font-bold text-slate-700 mb-2"
+                }, "Победитель!"),
+                React.createElement('div', {
+                    key: 'winner',
+                    className: "inline-block px-8 py-3 rounded-2xl text-3xl font-extrabold text-slate-700 mb-6 shadow-lg",
+                    style: { backgroundColor: winner.color }
+                }, winner.label),
+                React.createElement('br', { key: 'br' }),
+                React.createElement('button', {
+                    key: 'close',
+                    onClick: onClose,
+                    className: `mt-2 px-8 py-3 rounded-xl bg-white/45 hover:bg-white/65 text-slate-700 font-semibold
+                               transition-all duration-200 backdrop-blur-sm border border-white/60
+                               active:scale-95`
+                }, "Закрыть")
+            ]));
+        }
+
+        function ParticipantsManager({ items, onItemsChange, onClearAll, disabled }) {
+            const [inputValue, setInputValue] = useState("");
+            const [editingIndex, setEditingIndex] = useState(null);
+            const [editValue, setEditValue] = useState("");
+            const fileInputRef = useRef(null);
+            const [dragOver, setDragOver] = useState(false);
+
+            const addLabels = (rawLabels) => {
+                const newItems = [];
+                rawLabels.forEach((label) => {
+                    if (!label.trim()) return;
+                    newItems.push({
+                        id: generateId(),
+                        label,
+                        color: getColorForIndex(items.length + newItems.length),
+                    });
+                });
+                if (newItems.length > 0) {
+                    onItemsChange([...items, ...newItems]);
+                }
+            };
+
+            const parseParticipantText = (text) => {
+                const parts = text.includes("@")
+                    ? text.split(/[\s,]+/)
+                    : text.split(/[\n,]+/);
+                return parts.map((label) => label.trim()).filter(Boolean);
+            };
+
+            const addItem = () => {
+                const labels = parseParticipantText(inputValue);
+                if (labels.length === 0) return;
+                addLabels(labels);
+                setInputValue("");
+            };
+
+            const removeItem = (id) => {
+                onItemsChange(items.filter((item) => item.id !== id));
+            };
+
+            const startEdit = (index, label) => {
+                setEditingIndex(index);
+                setEditValue(label);
+            };
+
+            const saveEdit = (index) => {
+                const trimmed = editValue.trim();
+                if (!trimmed) return;
+                const newItems = [...items];
+                newItems[index] = { ...newItems[index], label: trimmed };
+                onItemsChange(newItems);
+                setEditingIndex(null);
+            };
+
+            const clearAll = () => {
+                if (confirm("Очистить всё: список участников, историю и рулетку?")) {
+                    onClearAll();
+                }
+            };
+
+            const handleFileUpload = (file) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const buffer = e.target.result;
+                    const utf8 = new TextDecoder("utf-8").decode(buffer);
+                    const hasReplacementChars = utf8.includes("\uFFFD");
+                    let text;
+                    if (!hasReplacementChars) {
+                        text = utf8;
+                    } else {
+                        try {
+                            text = new TextDecoder("windows-1251").decode(buffer);
+                        } catch {
+                            text = utf8;
+                        }
+                    }
+                    addLabels(parseParticipantText(text));
+                };
+                reader.readAsArrayBuffer(file);
+            };
+
+            const handleFileChange = (e) => {
+                const file = e.target.files?.[0];
+                if (file) handleFileUpload(file);
+                e.target.value = "";
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const file = e.dataTransfer.files?.[0];
+                if (file && file.name.endsWith(".txt")) {
+                    handleFileUpload(file);
+                }
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === "Enter") addItem();
+            };
+
+            return React.createElement('div', {
+                className: "glass rounded-xl sm:rounded-2xl p-3 sm:p-5 w-full max-w-md"
+            }, [
+                React.createElement('h2', {
+                    key: 'title',
+                    className: "text-base sm:text-lg font-bold text-slate-700 mb-3 sm:mb-4 flex items-center gap-2"
+                }, [
+                    React.createElement('svg', {
+                        key: 'icon',
+                        className: "w-4 h-4 sm:w-5 sm:h-5",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor",
+                        strokeWidth: 2
+                    }, React.createElement('path', {
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        d: "M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                    })),
+                    "Участники",
+                    React.createElement('span', {
+                        key: 'count',
+                        className: "ml-auto text-xs sm:text-sm font-normal text-slate-500"
+                    }, `${items.length} чел.`)
+                ]),
+                React.createElement('div', {
+                    key: 'input',
+                    className: "flex gap-2 mb-2 sm:mb-3"
+                }, [
+                    React.createElement('input', {
+                        key: 'field',
+                        type: "text",
+                        value: inputValue,
+                        onChange: (e) => setInputValue(e.target.value),
+                        onKeyDown: handleKeyDown,
+                        placeholder: "Имя участника...",
+                        disabled: disabled,
+                        className: `flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-white/45 border border-white/60
+                                   text-slate-700 placeholder-slate-400
+                                   focus:outline-none focus:ring-2 focus:ring-violet-300/70 focus:border-transparent
+                                   disabled:opacity-50 text-sm`
+                    }),
+                    React.createElement('button', {
+                        key: 'add',
+                        onClick: addItem,
+                        disabled: disabled || !inputValue.trim(),
+                        className: `w-10 sm:w-11 px-0 py-2 sm:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-violet-400 to-sky-400
+                                   hover:from-violet-300 hover:to-sky-300
+                                   disabled:from-slate-300 disabled:to-slate-300
+                                   text-white font-semibold text-lg sm:text-xl leading-none
+                                   transition-all duration-200 active:scale-95
+                                   disabled:opacity-50 disabled:active:scale-100
+                                   whitespace-nowrap flex items-center justify-center`
+                    }, "+")
+                ]),
+                React.createElement('div', {
+                    key: 'upload',
+                    onDragOver: (e) => { e.preventDefault();
+                        setDragOver(true); },
+                    onDragLeave: () => setDragOver(false),
+                    onDrop: handleDrop,
+                    className: `relative mb-2 sm:mb-3 border-2 border-dashed rounded-lg sm:rounded-xl p-2 sm:p-3 text-center transition-all duration-200 cursor-pointer
+                               ${dragOver ? "border-violet-300 bg-violet-200/20" : "border-white/50 hover:border-white/70 bg-white/30"}`,
+                    onClick: () => fileInputRef.current?.click()
+                }, [
+                    React.createElement('input', {
+                        key: 'file',
+                        ref: fileInputRef,
+                        type: "file",
+                        accept: ".txt",
+                        onChange: handleFileChange,
+                        className: "hidden"
+                    }),
+                    React.createElement('p', {
+                        key: 'text',
+                        className: "text-slate-500 text-[10px] sm:text-xs flex items-center justify-center gap-1"
+                    }, [
+                        React.createElement('svg', {
+                            key: 'icon',
+                            className: "w-3.5 h-3.5 sm:w-4 sm:h-4",
+                            fill: "none",
+                            viewBox: "0 0 24 24",
+                            stroke: "currentColor",
+                            strokeWidth: 2
+                        }, React.createElement('path', {
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            d: "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        })),
+                        React.createElement('span', {
+                            key: 'desktop',
+                            className: "hidden sm:inline"
+                        }, "Загрузить из .txt файла или вставить список через запятую"),
+                        React.createElement('span', {
+                            key: 'mobile',
+                            className: "sm:hidden"
+                        }, "Загрузить .txt или вставить список")
+                    ])
+                ]),
+                React.createElement('div', {
+                    key: 'list',
+                    className: "max-h-48 sm:max-h-64 overflow-y-auto space-y-1 sm:space-y-1.5 pr-1"
+                }, items.length === 0 ?
+                    React.createElement('p', {
+                        className: "text-slate-400 text-xs sm:text-sm text-center py-4 sm:py-6"
+                    }, "Список пуст. Добавьте участников!") :
+                    items.map((item, index) =>
+                        React.createElement('div', {
+                            key: item.id,
+                            className: "group flex items-center gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-white/30 hover:bg-white/45 transition-all duration-200"
+                        }, [
+                            React.createElement('span', {
+                                key: 'color',
+                                className: "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0 ring-1 ring-white/10",
+                                style: { backgroundColor: item.color }
+                            }),
+                            editingIndex === index ?
+                                React.createElement('input', {
+                                    key: 'edit',
+                                    type: "text",
+                                    value: editValue,
+                                    onChange: (e) => setEditValue(e.target.value),
+                                    onBlur: () => saveEdit(index),
+                                    onKeyDown: (e) => {
+                                        if (e.key === "Enter") saveEdit(index);
+                                        if (e.key === "Escape") setEditingIndex(null);
+                                    },
+                                    autoFocus: true,
+                                    className: "flex-1 px-2 py-1 rounded bg-white/50 text-slate-700 text-xs sm:text-sm border border-white/60 focus:outline-none focus:ring-1 focus:ring-violet-300"
+                                }) :
+                                React.createElement('span', {
+                                    key: 'label',
+                                    className: "flex-1 text-slate-600 text-xs sm:text-sm truncate cursor-pointer hover:text-slate-800",
+                                    onDoubleClick: () => startEdit(index, item.label),
+                                    title: "Двойной клик для редактирования"
+                                }, item.label),
+                            React.createElement('button', {
+                                key: 'delete',
+                                onClick: () => removeItem(item.id),
+                                disabled: disabled,
+                                className: "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-slate-400 hover:text-red-400 transition-all duration-200 disabled:hidden p-1 -mr-1 rounded-lg hover:bg-red-50/50",
+                                title: "Удалить",
+                                "aria-label": `Удалить ${item.label}`
+                            }, React.createElement('svg', {
+                                className: "w-4 h-4",
+                                fill: "none",
+                                viewBox: "0 0 24 24",
+                                stroke: "currentColor",
+                                strokeWidth: 2
+                            }, React.createElement('path', {
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                                d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            })))
+                        ])
+                    )
+                ),
+                React.createElement('button', {
+                    key: 'clear',
+                    onClick: clearAll,
+                    disabled: disabled,
+                    className: `mt-3 w-full py-2 rounded-xl text-sm font-medium text-red-400/90 hover:text-red-500
+                               bg-red-500/5 hover:bg-red-500/10 border border-red-300/30
+                               transition-all duration-200 active:scale-[0.98]
+                               disabled:opacity-30 flex items-center justify-center gap-1.5`
+                }, [
+                    React.createElement('svg', {
+                        key: 'icon',
+                        className: "w-4 h-4",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor",
+                        strokeWidth: 2
+                    }, React.createElement('path', {
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    })),
+                    "Очистить всё"
+                ])
+            ]);
+        }
+
+        function RouletteApp() {
+            const { hapticSuccess } = useTelegramMiniApp();
+            const [items, setItems] = useState(loadItems);
+            const [winner, setWinner] = useState(null);
+            const [showModal, setShowModal] = useState(false);
+            const [history, setHistory] = useState([]);
+
+            useEffect(() => {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            }, [items]);
+
+            const handleItemsChange = useCallback((newItems) => {
+                setItems(newItems);
+            }, []);
+
+            const fireConfetti = useCallback(() => {
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                const frame = () => {
+                    confetti({
+                        particleCount: 3,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0, y: 0.7 },
+                        colors: ["#FCA5A5", "#FDE68A", "#67E8F9", "#C4B5FD", "#A7F3D0"],
+                    });
+                    confetti({
+                        particleCount: 3,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1, y: 0.7 },
+                        colors: ["#FCA5A5", "#FDE68A", "#67E8F9", "#C4B5FD", "#A7F3D0"],
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                };
+                frame();
+
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 150,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: ["#FCA5A5", "#FDE68A", "#67E8F9", "#C4B5FD", "#A7F3D0"],
+                    });
+                }, 200);
+            }, []);
+
+            const handleSpinEnd = useCallback((winnerItem) => {
+                setWinner({ label: winnerItem.label, color: winnerItem.color });
+                setShowModal(true);
+                setHistory((prev) => [{ label: winnerItem.label, color: winnerItem.color }, ...prev]);
+                fireConfetti();
+                hapticSuccess();
+            }, [fireConfetti, hapticSuccess]);
+
+            const closeModal = useCallback(() => {
+                setShowModal(false);
+                setWinner(null);
+            }, []);
+
+            const clearHistory = () => {
+                setHistory([]);
+            };
+
+            const clearAll = useCallback(() => {
+                setItems([]);
+                setHistory([]);
+                setWinner(null);
+                setShowModal(false);
+            }, []);
+
+            return React.createElement('div', {
+                className: "min-h-screen gradient-bg flex flex-col relative overflow-hidden"
+            }, [
+                React.createElement('div', {
+                    key: 'blob1',
+                    className: "absolute -top-32 -right-32 w-96 h-96 rounded-full bg-violet-200/45 blur-3xl pointer-events-none"
+                }),
+                React.createElement('div', {
+                    key: 'blob2',
+                    className: "absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-pink-200/40 blur-3xl pointer-events-none"
+                }),
+                React.createElement('div', {
+                    key: 'blob3',
+                    className: "absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-cyan-200/35 blur-3xl pointer-events-none"
+                }),
+                React.createElement('header', {
+                    key: 'header',
+                    className: "relative z-10 glass border-b border-white/10"
+                }, React.createElement('div', {
+                    className: "max-w-6xl mx-auto px-4 py-4 flex items-center justify-between"
+                }, [
+                    React.createElement('div', {
+                        key: 'left',
+                        className: "flex items-center gap-3"
+                    }, [
+                        React.createElement('div', {
+                            key: 'icon',
+                            className: "w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-sky-300 flex items-center justify-center shadow-lg shadow-violet-400/25 ring-1 ring-white/40"
+                        }, React.createElement('svg', {
+                            className: "w-5 h-5 text-white",
+                            viewBox: "0 0 24 24",
+                            fill: "none",
+                            stroke: "currentColor",
+                            strokeWidth: 1.5,
+                            strokeLinejoin: "round",
+                            strokeLinecap: "round"
+                        }, [
+                            React.createElement('path', { key: 'gem', d: "M6 3h12l3.5 5.5L12 21 2.5 8.5z",
+                                fill: "rgba(255,255,255,0.35)" }),
+                            React.createElement('path', { key: 'top', d: "M2.5 8.5h19" }),
+                            React.createElement('path', { key: 'l', d: "M9 3 6.5 8.5 12 21" }),
+                            React.createElement('path', { key: 'r', d: "M15 3l2.5 5.5L12 21" })
+                        ])),
+                        React.createElement('div', { key: 'text' }, [
+                            React.createElement('h1', {
+                                key: 'title',
+                                className: "text-xl font-bold text-slate-700 tracking-tight"
+                            }, "Кристальная рулетка"),
+                            React.createElement('p', {
+                                key: 'subtitle',
+                                className: "text-xs text-slate-500"
+                            }, "Случайный выбор победителя")
+                        ])
+                    ]),
+                    React.createElement('button', {
+                        key: 'back',
+                        onClick: () => window.showPage('home'),
+                        className: "bg-white/30 backdrop-blur rounded-full p-2 shadow-sm border border-white/40 hover:bg-white/50 transition-colors text-slate-600",
+                        'aria-label': 'Назад'
+                    }, React.createElement('svg', {
+                        viewBox: '0 0 24 24',
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        strokeWidth: '2',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        className: 'w-5 h-5'
+                    }, React.createElement('path', { d: 'M19 12H5M12 19l-7-7 7-7' })))
+                ])),
+                React.createElement('main', {
+                    key: 'main',
+                    className: "relative z-10 flex-1 max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-10 w-full"
+                }, React.createElement('div', {
+                    className: "flex flex-col lg:grid lg:grid-cols-[1fr_auto] gap-4 lg:gap-10 items-start"
+                }, [
+                    React.createElement('div', {
+                        key: 'wheel',
+                        className: "flex flex-col items-center justify-center w-full"
+                    }, [
+                        React.createElement('div', {
+                            key: 'wheel-container',
+                            className: "glass-strong rounded-2xl sm:rounded-3xl p-3 sm:p-8 inline-flex flex-col items-center w-full max-w-md lg:max-w-none"
+                        }, [
+                            React.createElement(SpinWheel, {
+                                key: 'wheel',
+                                items: items,
+                                onSpinEnd: handleSpinEnd,
+                                disabled: items.length < 2
+                            }),
+                            items.length < 2 && React.createElement('p', {
+                                key: 'hint',
+                                className: "text-slate-500 text-xs sm:text-sm mt-2 sm:mt-3 animate-pulse text-center px-2"
+                            }, "Добавьте минимум 2 участника для вращения")
+                        ]),
+                        history.length > 0 && React.createElement('div', {
+                            key: 'history',
+                            className: "glass rounded-2xl p-3 sm:p-4 mt-3 sm:mt-4 w-full max-w-md"
+                        }, [
+                            React.createElement('div', {
+                                key: 'header',
+                                className: "flex items-center justify-between mb-2 sm:mb-3"
+                            }, [
+                                React.createElement('h3', {
+                                    key: 'title',
+                                    className: "text-xs sm:text-sm font-bold text-slate-600 flex items-center gap-1.5"
+                                }, [
+                                    React.createElement('svg', {
+                                        key: 'icon',
+                                        className: "w-3.5 h-3.5 sm:w-4 sm:h-4",
+                                        fill: "none",
+                                        viewBox: "0 0 24 24",
+                                        stroke: "currentColor",
+                                        strokeWidth: 2
+                                    }, React.createElement('path', {
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round",
+                                        d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    })),
+                                    "История результатов"
+                                ]),
+                                React.createElement('button', {
+                                    key: 'clear',
+                                    onClick: clearHistory,
+                                    className: "text-[10px] sm:text-xs text-slate-400 hover:text-red-400 transition-colors"
+                                }, "Очистить")
+                            ]),
+                            React.createElement('div', {
+                                key: 'tags',
+                                className: "flex flex-wrap gap-1.5 sm:gap-2"
+                            }, history.slice(0, 10).map((h, i) =>
+                                React.createElement('span', {
+                                    key: i,
+                                    className: "px-2 sm:px-3 py-0.5 sm:py-1 rounded-lg text-slate-700 text-[10px] sm:text-xs font-medium shadow-sm",
+                                    style: { backgroundColor: h.color }
+                                }, h.label)
+                            ))
+                        ])
+                    ]),
+                    React.createElement('div', {
+                        key: 'participants',
+                        className: "w-full lg:w-auto"
+                    }, React.createElement(ParticipantsManager, {
+                        items: items,
+                        onItemsChange: handleItemsChange,
+                        onClearAll: clearAll,
+                        disabled: false
+                    }))
+                ])),
+                React.createElement('footer', {
+                    key: 'footer',
+                    className: "relative z-10 glass border-t border-white/10 py-4 mt-auto"
+                }, React.createElement('div', {
+                    className: "max-w-6xl mx-auto px-4 text-center text-slate-500/70 text-xs"
+                }, `© ${new Date().getFullYear()} Created Disa.`)),
+                showModal && React.createElement(WinnerModal, {
+                    key: 'modal',
+                    winner: winner,
+                    onClose: closeModal
+                })
+            ]);
+        }
+
+        // Инициализация рулетки будет выполнена при первом вызове showPage('roulette')
+    </script>
+
+</body>
+</html>
