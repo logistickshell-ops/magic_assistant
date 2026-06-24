@@ -1897,9 +1897,9 @@
         }
     </script>
 
-    <!-- ===== Код расклада (React) – исправленная версия ===== -->
+    <!-- ===== Код расклада (React) – исправленная версия с автообновлением по тексту ===== -->
     <script type="text/babel">
-        const { useState, useEffect, useMemo, useCallback } = React;
+        const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
         const GRID_OPTIONS = [
             { label: '4 × 3 (12 ячеек)', value: '4x3', w: 4, h: 3 },
@@ -2038,6 +2038,18 @@
 
             // Смена сетки – автоматически перегенерируем
             useEffect(() => { generateLayout(); }, [gridValue]);
+
+            // Автообновление при изменении текста выигрышных или сжигающих карт (с защитой от частых вызовов)
+            const timeoutRef = useRef(null);
+            useEffect(() => {
+                if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                timeoutRef.current = setTimeout(() => {
+                    generateLayout();
+                }, 300);
+                return () => {
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                };
+            }, [winText, burnText, generateLayout]);
 
             const handleCardClick = (id) => {
                 setCards(prev => prev.map(c => c.id === id ? { ...c, isOpen: !c.isOpen } : c));
