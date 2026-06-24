@@ -7,23 +7,30 @@
     <meta name="description" content="Эфирные помощники: светлый расклад, магические кубики и кристальная рулетка." />
 
     <!-- Telegram Mini App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js">
+    </script>
 
     <!-- Tailwind CSS (для расклада и рулетки) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
 
     <!-- React и ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js">
+    </script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js">
+    </script>
 
     <!-- html2canvas (для расклада) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
 
     <!-- canvas-confetti (для рулетки) -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js">
+    </script>
 
     <!-- Babel standalone для JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js">
+    </script>
 
     <style>
         /* ===== Глобальные сбросы ===== */
@@ -120,14 +127,14 @@
             border-radius: 0.75rem;
             font-size: 12px;
             font-weight: 500;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             color: #6b6680;
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.2s;
             cursor: pointer;
         }
         .btn-ghost:hover:not(:disabled) {
-            background: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5);
         }
 
         /* ===== Декоративные блобы ===== */
@@ -138,13 +145,40 @@
             pointer-events: none;
             animation: breathe 7s ease-in-out infinite;
         }
-        .blob-1 { top: -96px; right: -112px; width: 320px; height: 320px; background: rgba(244, 168, 212, .35); }
-        .blob-2 { bottom: -112px; left: -96px; width: 320px; height: 320px; background: rgba(196, 181, 253, .30); animation-delay: 1.3s; }
-        .blob-3 { top: 50%; right: 32px; width: 224px; height: 224px; background: rgba(103, 232, 249, .25); animation-delay: 2.2s; }
+        .blob-1 {
+            top: -96px;
+            right: -112px;
+            width: 320px;
+            height: 320px;
+            background: rgba(244, 168, 212, .35);
+        }
+        .blob-2 {
+            bottom: -112px;
+            left: -96px;
+            width: 320px;
+            height: 320px;
+            background: rgba(196, 181, 253, .30);
+            animation-delay: 1.3s;
+        }
+        .blob-3 {
+            top: 50%;
+            right: 32px;
+            width: 224px;
+            height: 224px;
+            background: rgba(103, 232, 249, .25);
+            animation-delay: 2.2s;
+        }
 
         @keyframes breathe {
-            0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .55; }
-            50% { transform: translate3d(0, -10px, 0) scale(1.04); opacity: .8; }
+            0%,
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: .55;
+            }
+            50% {
+                transform: translate3d(0, -10px, 0) scale(1.04);
+                opacity: .8;
+            }
         }
 
         /* ===== Главная страница (home) ===== */
@@ -170,8 +204,15 @@
             animation: twinkle 3.8s ease-in-out infinite;
         }
         @keyframes twinkle {
-            0%, 100% { transform: scale(.72) rotate(0deg); opacity: .2; }
-            50% { transform: scale(1) rotate(18deg); opacity: .65; }
+            0%,
+            100% {
+                transform: scale(.72) rotate(0deg);
+                opacity: .2;
+            }
+            50% {
+                transform: scale(1) rotate(18deg);
+                opacity: .65;
+            }
         }
 
         #home .content {
@@ -259,7 +300,9 @@
             transform: translateY(-2px);
             box-shadow: 0 24px 40px rgba(196, 181, 253, .35);
         }
-        #home .link:active { transform: translateY(0) scale(.99); }
+        #home .link:active {
+            transform: translateY(0) scale(.99);
+        }
 
         #home .link-icon {
             position: relative;
@@ -273,17 +316,30 @@
             border-radius: 16px;
             transition: transform .3s ease;
         }
-        #home .link:hover .link-icon { transform: scale(1.05); }
-        #home .link-icon svg { height: 24px; width: 24px; }
+        #home .link:hover .link-icon {
+            transform: scale(1.05);
+        }
+        #home .link-icon svg {
+            height: 24px;
+            width: 24px;
+        }
 
-        #home .link-text { position: relative; z-index: 1; flex: 1; }
+        #home .link-text {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
         #home .link-label {
             display: block;
             font-size: clamp(1rem, 4.5vw, 1.125rem);
             font-weight: 600;
             color: #334155;
         }
-        #home .link-hint { display: block; font-size: 12px; color: #94a3b8; }
+        #home .link-hint {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+        }
 
         #home .link-arrow {
             position: relative;
@@ -293,7 +349,10 @@
             color: #cbd5e1;
             transition: transform .3s ease, color .3s ease;
         }
-        #home .link:hover .link-arrow { transform: translateX(4px); color: #64748b; }
+        #home .link:hover .link-arrow {
+            transform: translateX(4px);
+            color: #64748b;
+        }
 
         #home .footer {
             font-size: 10px;
@@ -303,16 +362,33 @@
         }
 
         @keyframes riseIn {
-            from { opacity: 0; transform: translateY(18px) scale(.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
-        #home .rise { opacity: 0; animation: riseIn .7s ease forwards; }
-        #home .d1 { animation-delay: .08s; }
-        #home .d2 { animation-delay: .16s; }
-        #home .d3 { animation-delay: .24s; }
-        #home .d4 { animation-delay: .36s; }
+        #home .rise {
+            opacity: 0;
+            animation: riseIn .7s ease forwards;
+        }
+        #home .d1 {
+            animation-delay: .08s;
+        }
+        #home .d2 {
+            animation-delay: .16s;
+        }
+        #home .d3 {
+            animation-delay: .24s;
+        }
+        #home .d4 {
+            animation-delay: .36s;
+        }
 
-        /* ===== Стили для кубиков (React) ===== */
+        /* ===== Стили для кубиков (React) — адаптивная версия ===== */
         #dice-app {
             --bg: #faf6ef;
             --bg-soft: #f3ede1;
@@ -327,7 +403,9 @@
             --sar: env(safe-area-inset-right);
         }
 
-        #dice-app * { box-sizing: border-box; }
+        #dice-app * {
+            box-sizing: border-box;
+        }
 
         #dice-app {
             font-family: "Inter", system-ui, sans-serif;
@@ -345,15 +423,23 @@
             touch-action: manipulation;
             -webkit-font-smoothing: antialiased;
             overscroll-behavior-y: contain;
+            display: flex;
+            flex-direction: column;
         }
 
         #dice-app .wrap {
             max-width: 768px;
             margin: 0 auto;
-            padding: 1.5rem 1rem 1.5rem;
+            padding: 1rem 0.75rem 1rem;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         @media (min-width: 640px) {
-            #dice-app .wrap { padding: 2.5rem 1.5rem; }
+            #dice-app .wrap {
+                padding: 2rem 1.5rem;
+            }
         }
 
         #dice-app .field {
@@ -361,237 +447,502 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 180px;
-            padding: 2rem 1rem;
+            min-height: 160px;
+            padding: 1.25rem 0.75rem;
             border: 1px solid var(--border);
-            border-radius: 1.5rem;
+            border-radius: 1.25rem;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(8px);
             box-shadow: 0 16px 48px -24px rgba(91, 75, 176, 0.3);
             overflow: hidden;
+            width: 100%;
+            max-width: 100%;
         }
         @media (min-width: 640px) {
-            #dice-app .field { min-height: 260px; padding: 2.5rem 1.5rem; border-radius: 1.75rem; }
+            #dice-app .field {
+                min-height: 240px;
+                padding: 2rem 1.5rem;
+                border-radius: 1.75rem;
+            }
         }
-        #dice-app .field::before, #dice-app .field::after {
-            content: ""; position: absolute; pointer-events: none; border-radius: 50%;
+        #dice-app .field::before,
+        #dice-app .field::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
             filter: blur(40px);
         }
         #dice-app .field::before {
-            left: 1rem; top: 1rem; width: 4rem; height: 4rem;
+            left: 0.5rem;
+            top: 0.5rem;
+            width: 3rem;
+            height: 3rem;
             background: rgba(124, 106, 209, 0.05);
         }
         #dice-app .field::after {
-            right: 1.5rem; bottom: 1rem; width: 5rem; height: 5rem;
+            right: 0.75rem;
+            bottom: 0.5rem;
+            width: 4rem;
+            height: 4rem;
             background: rgba(210, 170, 120, 0.1);
         }
         @media (min-width: 640px) {
-            #dice-app .field::before { width: 6rem; height: 6rem; }
-            #dice-app .field::after { width: 8rem; height: 8rem; }
+            #dice-app .field::before {
+                width: 6rem;
+                height: 6rem;
+            }
+            #dice-app .field::after {
+                width: 8rem;
+                height: 8rem;
+            }
         }
 
         #dice-app .sum-badge {
-            position: absolute; right: 0.75rem; top: 0.75rem;
+            position: absolute;
+            right: 0.5rem;
+            top: 0.5rem;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(8px);
             border-radius: 999px;
-            padding: 0.25rem 0.625rem;
-            font-size: 10px;
-            letter-spacing: 0.2em;
+            padding: 0.15rem 0.5rem;
+            font-size: 9px;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--ink-soft);
+            white-space: nowrap;
         }
         @media (min-width: 640px) {
-            #dice-app .sum-badge { right: 1.25rem; top: 1.25rem; padding: 0.25rem 0.75rem; font-size: 12px; }
+            #dice-app .sum-badge {
+                right: 1.25rem;
+                top: 1.25rem;
+                padding: 0.25rem 0.75rem;
+                font-size: 12px;
+            }
         }
-        #dice-app .sum-badge b { color: var(--ink); font-weight: 600; }
+        #dice-app .sum-badge b {
+            color: var(--ink);
+            font-weight: 600;
+        }
 
         #dice-app .dice-grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        @media (min-width: 480px) {
+            #dice-app .dice-grid {
+                gap: 1rem;
+            }
+        }
+        @media (min-width: 640px) {
+            #dice-app .dice-grid {
+                gap: 1.5rem;
+            }
+        }
+
+        #dice-app .die {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        #dice-app .die-scene {
+            perspective: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #dice-app .die-preserve-3d {
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #dice-app .cube {
+            transform-style: preserve-3d;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1.25rem;
         }
-        @media (min-width: 640px) {
-            #dice-app .dice-grid { gap: 2.5rem; }
-        }
-
-        #dice-app .die {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #dice-app .die-scene { perspective: 500px; }
-        #dice-app .die-preserve-3d { transform-style: preserve-3d; }
-
-        #dice-app .cube { transform-style: preserve-3d; position: relative; }
         #dice-app .cube-face {
-            position: absolute; inset: 0;
+            position: absolute;
+            inset: 0;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            padding: 16%;
+            padding: 14%;
             backface-visibility: hidden;
-            border-radius: 16%;
+            border-radius: 14%;
             border: 1.5px solid #ddd5c4;
         }
-        #dice-app .cube-face--top    { background: linear-gradient(135deg, #fffdf7, #f5f0e6); }
-        #dice-app .cube-face--front  { background: linear-gradient(135deg, #f8f3e9, #f0eadc); }
-        #dice-app .cube-face--back   { background: linear-gradient(135deg, #eee8da, #e6dfd1); }
-        #dice-app .cube-face--right  { background: linear-gradient(135deg, #f2ece0, #ebe4d6); }
-        #dice-app .cube-face--left   { background: linear-gradient(135deg, #f0eadc, #e9e2d4); }
-        #dice-app .cube-face--bottom { background: linear-gradient(135deg, #eae4d6, #e2dbc9); }
+        #dice-app .cube-face--top {
+            background: linear-gradient(135deg, #fffdf7, #f5f0e6);
+        }
+        #dice-app .cube-face--front {
+            background: linear-gradient(135deg, #f8f3e9, #f0eadc);
+        }
+        #dice-app .cube-face--back {
+            background: linear-gradient(135deg, #eee8da, #e6dfd1);
+        }
+        #dice-app .cube-face--right {
+            background: linear-gradient(135deg, #f2ece0, #ebe4d6);
+        }
+        #dice-app .cube-face--left {
+            background: linear-gradient(135deg, #f0eadc, #e9e2d4);
+        }
+        #dice-app .cube-face--bottom {
+            background: linear-gradient(135deg, #eae4d6, #e2dbc9);
+        }
         #dice-app .cube-face::before {
-            content: ""; position: absolute; inset: 0; border-radius: inherit;
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
             box-shadow:
-                inset 0 1px 2px rgba(255,255,255,0.5),
-                inset 0 -1px 2px rgba(0,0,0,0.04);
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.04);
             pointer-events: none;
         }
-        #dice-app .cube-face--front  { transform: translateZ(calc(var(--hs))); }
-        #dice-app .cube-face--back   { transform: rotateY(180deg) translateZ(calc(var(--hs))); }
-        #dice-app .cube-face--right  { transform: rotateY(90deg)  translateZ(calc(var(--hs))); }
-        #dice-app .cube-face--left   { transform: rotateY(-90deg) translateZ(calc(var(--hs))); }
-        #dice-app .cube-face--top    { transform: rotateX(-90deg) translateZ(calc(var(--hs))); }
-        #dice-app .cube-face--bottom { transform: rotateX(90deg)  translateZ(calc(var(--hs))); }
+        #dice-app .cube-face--front {
+            transform: translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--back {
+            transform: rotateY(180deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--right {
+            transform: rotateY(90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--left {
+            transform: rotateY(-90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--top {
+            transform: rotateX(-90deg) translateZ(calc(var(--hs)));
+        }
+        #dice-app .cube-face--bottom {
+            transform: rotateX(90deg) translateZ(calc(var(--hs)));
+        }
 
-        #dice-app .cube-dot { display: flex; align-items: center; justify-content: center; }
+        #dice-app .cube-dot {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         #dice-app .cube-dot.active::after {
-            content: ""; display: block;
-            width: 78%; height: 78%;
+            content: "";
+            display: block;
+            width: 72%;
+            height: 72%;
             border-radius: 50%;
             background: radial-gradient(circle at 40% 38%, #443f5c, #2d2a44);
             box-shadow:
-                0 1px 2px rgba(0,0,0,0.25),
-                inset 0 1px 1px rgba(255,255,255,0.15);
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                inset 0 1px 1px rgba(255, 255, 255, 0.15);
         }
 
         #dice-app .flat-face {
             background: linear-gradient(135deg, #fffdf7, #f5f0e6);
             border: 1.5px solid #ddd5c4;
-            border-radius: 16%;
+            border-radius: 14%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            padding: 16%;
+            padding: 14%;
             box-shadow:
-                inset 0 1px 2px rgba(255,255,255,0.5),
-                inset 0 -1px 2px rgba(0,0,0,0.04),
-                0 10px 18px rgba(79,70,229,0.15);
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.04),
+                0 10px 18px rgba(79, 70, 229, 0.15);
             transform-style: flat;
         }
 
         #dice-app .ground-shadow {
             border-radius: 50%;
-            background: radial-gradient(ellipse, rgba(45,42,68,0.18) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(45, 42, 68, 0.18) 0%, transparent 70%);
+            flex-shrink: 0;
         }
 
-        /* Анимации кубиков */
+        /* Анимации кубиков — адаптированы под мобильные экраны */
         @keyframes diceThrow {
-            0%   { transform: translate3d(0,0,0) scale(1); }
-            3%   { transform: translate3d(calc(var(--dir,1)*-3px), 3px, 0) scale(0.96); }
-            7%   { transform: translate3d(calc(var(--dir,1)*6px), -50px, 0) scale(1.06); }
-            11%  { transform: translate3d(calc(var(--dir,1)*11px), -80px, 0) scale(1.1); }
-            15%  { transform: translate3d(calc(var(--dir,1)*14px), -62px, 0) scale(1.07); }
-            19%  { transform: translate3d(calc(var(--dir,1)*14px), -18px, 0) scale(1.02); }
-            22%  { transform: translate3d(calc(var(--dir,1)*14px), 4px, 0) scale(0.96); }
-            26%  { transform: translate3d(calc(var(--dir,1)*12px), -38px, 0) scale(1.05); }
-            30%  { transform: translate3d(calc(var(--dir,1)*9px), -24px, 0) scale(1.02); }
-            34%  { transform: translate3d(calc(var(--dir,1)*6px), -6px, 0) scale(1); }
-            37%  { transform: translate3d(calc(var(--dir,1)*5px), 4px, 0) scale(0.98); }
-            40%  { transform: translate3d(calc(var(--dir,1)*3px), -18px, 0) scale(1.02); }
-            44%  { transform: translate3d(calc(var(--dir,1)*1px), -20px, 0) scale(1.03); }
-            48%  { transform: translate3d(calc(var(--dir,1)*-1px), -6px, 0) scale(1); }
-            51%  { transform: translate3d(calc(var(--dir,1)*-2px), 3px, 0) scale(0.99); }
-            55%  { transform: translate3d(calc(var(--dir,1)*-2px), -10px, 0) scale(1.01); }
-            59%  { transform: translate3d(calc(var(--dir,1)*-1px), -4px, 0) scale(1); }
-            63%  { transform: translate3d(0, 2px, 0) scale(1); }
-            67%  { transform: translate3d(0, -3px, 0) scale(1); }
-            70%  { transform: translate3d(0, -1px, 0) scale(1); }
-            75%  { transform: translate3d(0, 1px, 0) scale(1); }
-            80%  { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(0, 0, 0) scale(1); }
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            3% {
+                transform: translate3d(calc(var(--dir, 1) * -2px), 2px, 0) scale(0.96);
+            }
+            7% {
+                transform: translate3d(calc(var(--dir, 1) * 4px), -32px, 0) scale(1.06);
+            }
+            11% {
+                transform: translate3d(calc(var(--dir, 1) * 7px), -52px, 0) scale(1.1);
+            }
+            15% {
+                transform: translate3d(calc(var(--dir, 1) * 9px), -40px, 0) scale(1.07);
+            }
+            19% {
+                transform: translate3d(calc(var(--dir, 1) * 9px), -12px, 0) scale(1.02);
+            }
+            22% {
+                transform: translate3d(calc(var(--dir, 1) * 9px), 2px, 0) scale(0.96);
+            }
+            26% {
+                transform: translate3d(calc(var(--dir, 1) * 8px), -24px, 0) scale(1.05);
+            }
+            30% {
+                transform: translate3d(calc(var(--dir, 1) * 6px), -16px, 0) scale(1.02);
+            }
+            34% {
+                transform: translate3d(calc(var(--dir, 1) * 4px), -4px, 0) scale(1);
+            }
+            37% {
+                transform: translate3d(calc(var(--dir, 1) * 3px), 2px, 0) scale(0.98);
+            }
+            40% {
+                transform: translate3d(calc(var(--dir, 1) * 2px), -12px, 0) scale(1.02);
+            }
+            44% {
+                transform: translate3d(calc(var(--dir, 1) * 1px), -13px, 0) scale(1.03);
+            }
+            48% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), -4px, 0) scale(1);
+            }
+            51% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), 2px, 0) scale(0.99);
+            }
+            55% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), -6px, 0) scale(1.01);
+            }
+            59% {
+                transform: translate3d(calc(var(--dir, 1) * -1px), -2px, 0) scale(1);
+            }
+            63% {
+                transform: translate3d(0, 1px, 0) scale(1);
+            }
+            67% {
+                transform: translate3d(0, -2px, 0) scale(1);
+            }
+            70% {
+                transform: translate3d(0, -1px, 0) scale(1);
+            }
+            75% {
+                transform: translate3d(0, 1px, 0) scale(1);
+            }
+            80% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            100% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
         }
 
         @keyframes diceSpin {
-            0%   { transform: rotateX(0) rotateY(0) rotateZ(0); }
-            10%  { transform: rotateX(-520deg) rotateY(360deg) rotateZ(-220deg); }
-            20%  { transform: rotateX(-1080deg) rotateY(760deg) rotateZ(-460deg); }
-            30%  { transform: rotateX(-1540deg) rotateY(1100deg) rotateZ(-680deg); }
-            40%  { transform: rotateX(-1910deg) rotateY(1380deg) rotateZ(-860deg); }
-            50%  { transform: rotateX(-2190deg) rotateY(1560deg) rotateZ(-980deg); }
-            60%  { transform: rotateX(-2370deg) rotateY(1680deg) rotateZ(-1040deg); }
-            70%  { transform: rotateX(-2460deg) rotateY(1740deg) rotateZ(-1066deg); }
-            80%  { transform: rotateX(-2500deg) rotateY(1780deg) rotateZ(-1078deg); }
-            90%  { transform: rotateX(-2515deg) rotateY(1795deg) rotateZ(-1079deg); }
-            100% { transform: rotateX(-2520deg) rotateY(1800deg) rotateZ(-1080deg); }
+            0% {
+                transform: rotateX(0) rotateY(0) rotateZ(0);
+            }
+            10% {
+                transform: rotateX(-520deg) rotateY(360deg) rotateZ(-220deg);
+            }
+            20% {
+                transform: rotateX(-1080deg) rotateY(760deg) rotateZ(-460deg);
+            }
+            30% {
+                transform: rotateX(-1540deg) rotateY(1100deg) rotateZ(-680deg);
+            }
+            40% {
+                transform: rotateX(-1910deg) rotateY(1380deg) rotateZ(-860deg);
+            }
+            50% {
+                transform: rotateX(-2190deg) rotateY(1560deg) rotateZ(-980deg);
+            }
+            60% {
+                transform: rotateX(-2370deg) rotateY(1680deg) rotateZ(-1040deg);
+            }
+            70% {
+                transform: rotateX(-2460deg) rotateY(1740deg) rotateZ(-1066deg);
+            }
+            80% {
+                transform: rotateX(-2500deg) rotateY(1780deg) rotateZ(-1078deg);
+            }
+            90% {
+                transform: rotateX(-2515deg) rotateY(1795deg) rotateZ(-1079deg);
+            }
+            100% {
+                transform: rotateX(-2520deg) rotateY(1800deg) rotateZ(-1080deg);
+            }
         }
 
         @keyframes diceOrient {
-            0%, 84% { transform: rotateX(0) rotateY(0); }
-            100%    { transform: rotateX(var(--frx)) rotateY(var(--fry)); }
+            0%,
+            84% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(var(--frx)) rotateY(var(--fry));
+            }
         }
 
         @keyframes diceShadow {
-            0%   { transform: scale(1);    opacity: 0.5; }
-            3%   { transform: scale(0.98); opacity: 0.48; }
-            7%   { transform: scale(0.5);  opacity: 0.15; }
-            11%  { transform: scale(0.35); opacity: 0.1; }
-            15%  { transform: scale(0.45); opacity: 0.14; }
-            19%  { transform: scale(0.6);  opacity: 0.28; }
-            22%  { transform: scale(0.92); opacity: 0.48; }
-            26%  { transform: scale(0.5);  opacity: 0.16; }
-            30%  { transform: scale(0.6);  opacity: 0.24; }
-            34%  { transform: scale(0.78); opacity: 0.36; }
-            37%  { transform: scale(0.9);  opacity: 0.44; }
-            40%  { transform: scale(0.68); opacity: 0.28; }
-            44%  { transform: scale(0.58); opacity: 0.2; }
-            48%  { transform: scale(0.8);  opacity: 0.36; }
-            51%  { transform: scale(0.88); opacity: 0.42; }
-            55%  { transform: scale(0.78); opacity: 0.36; }
-            59%  { transform: scale(0.85); opacity: 0.4; }
-            63%  { transform: scale(0.92); opacity: 0.44; }
-            67%  { transform: scale(0.9);  opacity: 0.44; }
-            70%  { transform: scale(0.92); opacity: 0.45; }
-            75%  { transform: scale(0.96); opacity: 0.47; }
-            80%  { transform: scale(1);    opacity: 0.5; }
-            100% { transform: scale(1);    opacity: 0.5; }
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            3% {
+                transform: scale(0.98);
+                opacity: 0.48;
+            }
+            7% {
+                transform: scale(0.5);
+                opacity: 0.15;
+            }
+            11% {
+                transform: scale(0.35);
+                opacity: 0.1;
+            }
+            15% {
+                transform: scale(0.45);
+                opacity: 0.14;
+            }
+            19% {
+                transform: scale(0.6);
+                opacity: 0.28;
+            }
+            22% {
+                transform: scale(0.92);
+                opacity: 0.48;
+            }
+            26% {
+                transform: scale(0.5);
+                opacity: 0.16;
+            }
+            30% {
+                transform: scale(0.6);
+                opacity: 0.24;
+            }
+            34% {
+                transform: scale(0.78);
+                opacity: 0.36;
+            }
+            37% {
+                transform: scale(0.9);
+                opacity: 0.44;
+            }
+            40% {
+                transform: scale(0.68);
+                opacity: 0.28;
+            }
+            44% {
+                transform: scale(0.58);
+                opacity: 0.2;
+            }
+            48% {
+                transform: scale(0.8);
+                opacity: 0.36;
+            }
+            51% {
+                transform: scale(0.88);
+                opacity: 0.42;
+            }
+            55% {
+                transform: scale(0.78);
+                opacity: 0.36;
+            }
+            59% {
+                transform: scale(0.85);
+                opacity: 0.4;
+            }
+            63% {
+                transform: scale(0.92);
+                opacity: 0.44;
+            }
+            67% {
+                transform: scale(0.9);
+                opacity: 0.44;
+            }
+            70% {
+                transform: scale(0.92);
+                opacity: 0.45;
+            }
+            75% {
+                transform: scale(0.96);
+                opacity: 0.47;
+            }
+            80% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
         }
 
-        #dice-app .anim-throw  { animation: diceThrow  3s linear both; will-change: transform; }
-        #dice-app .anim-spin   { animation: diceSpin   3s linear both; will-change: transform; }
-        #dice-app .anim-orient { animation: diceOrient 3s cubic-bezier(0.55,0,1,1) both; will-change: transform; }
-        #dice-app .anim-shadow { animation: diceShadow 3s linear both; will-change: transform, opacity; }
+        #dice-app .anim-throw {
+            animation: diceThrow 3s linear both;
+            will-change: transform;
+        }
+        #dice-app .anim-spin {
+            animation: diceSpin 3s linear both;
+            will-change: transform;
+        }
+        #dice-app .anim-orient {
+            animation: diceOrient 3s cubic-bezier(0.55, 0, 1, 1) both;
+            will-change: transform;
+        }
+        #dice-app .anim-shadow {
+            animation: diceShadow 3s linear both;
+            will-change: transform, opacity;
+        }
 
         #dice-app .panel {
-            margin-top: 1rem;
+            margin-top: 0.75rem;
             border: 1px solid var(--border);
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(8px);
             border-radius: 1.25rem;
-            padding: 1rem;
+            padding: 0.75rem;
         }
         @media (min-width: 640px) {
-            #dice-app .panel { margin-top: 1.5rem; border-radius: 1.75rem; padding: 1.25rem; }
+            #dice-app .panel {
+                margin-top: 1.5rem;
+                border-radius: 1.75rem;
+                padding: 1.25rem;
+            }
         }
 
         #dice-app .row {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 0.75rem; margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
         }
-        @media (min-width: 640px) { #dice-app .row { margin-bottom: 1.25rem; } }
+        @media (min-width: 640px) {
+            #dice-app .row {
+                margin-bottom: 1.25rem;
+                gap: 0.75rem;
+            }
+        }
 
         #dice-app .label {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 500;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--ink-soft);
         }
-        @media (min-width: 640px) { #dice-app .label { font-size: 14px; } }
+        @media (min-width: 640px) {
+            #dice-app .label {
+                font-size: 14px;
+            }
+        }
 
         #dice-app .seg {
             display: inline-flex;
@@ -599,20 +950,36 @@
             background: rgba(243, 237, 225, 0.6);
             border-radius: 999px;
             padding: 0.125rem;
+            flex-shrink: 0;
         }
-        @media (min-width: 640px) { #dice-app .seg { padding: 0.25rem; } }
+        @media (min-width: 640px) {
+            #dice-app .seg {
+                padding: 0.25rem;
+            }
+        }
 
         #dice-app .seg button {
-            min-width: 40px;
-            padding: 0.5rem 1rem;
+            min-width: 32px;
+            padding: 0.35rem 0.6rem;
             border-radius: 999px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--ink-soft);
             transition: all 0.2s;
+            border: none;
+            background: transparent;
+            cursor: pointer;
         }
-        @media (min-width: 640px) { #dice-app .seg button { min-width: 44px; padding: 0.5rem 1.25rem; } }
-        #dice-app .seg button:hover:not(:disabled) { color: var(--ink); }
+        @media (min-width: 640px) {
+            #dice-app .seg button {
+                min-width: 44px;
+                padding: 0.5rem 1.25rem;
+                font-size: 14px;
+            }
+        }
+        #dice-app .seg button:hover:not(:disabled) {
+            color: var(--ink);
+        }
         #dice-app .seg button.active {
             background: var(--accent);
             color: #fff;
@@ -624,25 +991,47 @@
             grid-template-columns: 1fr 1fr;
             gap: 0.5rem;
         }
-        @media (min-width: 640px) { #dice-app .actions { gap: 0.75rem; } }
+        @media (min-width: 640px) {
+            #dice-app .actions {
+                gap: 0.75rem;
+            }
+        }
 
-        /* ===== Кнопки кубиков ===== */
+        /* ===== Кнопки кубиков — адаптивные ===== */
         #dice-app .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem 1.25rem;
-            border-radius: 0.875rem;
-            font-size: 15px;
+            gap: 0.4rem;
+            padding: 0.7rem 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 12px;
             font-weight: 500;
             transition: all 0.25s ease;
             border: none;
             cursor: pointer;
-            min-height: 56px;
+            min-height: 44px;
             width: 100%;
+            white-space: nowrap;
         }
-        #dice-app .btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+        @media (min-width: 640px) {
+            #dice-app .btn {
+                padding: 1rem 1.25rem;
+                font-size: 15px;
+                min-height: 56px;
+            }
+        }
+        #dice-app .btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        @media (min-width: 640px) {
+            #dice-app .btn svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
 
         #dice-app .btn-primary {
             background: linear-gradient(135deg, #7c6ad1, #5b4bb0);
@@ -653,203 +1042,400 @@
             box-shadow: 0 12px 32px -6px rgba(91, 75, 176, 0.5);
             transform: translateY(-2px);
         }
-        #dice-app .btn-primary:active:not(:disabled) { transform: translateY(0px); }
-        #dice-app .btn-primary:disabled { opacity: 0.6; cursor: wait; }
-        #dice-app .btn-primary.rolling { opacity: 0.8; }
+        #dice-app .btn-primary:active:not(:disabled) {
+            transform: translateY(0px);
+        }
+        #dice-app .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+        #dice-app .btn-primary.rolling {
+            opacity: 0.8;
+        }
 
         #dice-app .btn-ghost {
             background: #ffffff;
             color: var(--ink);
             border: 1.5px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
         #dice-app .btn-ghost:hover:not(:disabled) {
             border-color: rgba(124, 106, 209, 0.4);
             color: var(--accent-deep);
             box-shadow: 0 4px 16px rgba(124, 106, 209, 0.08);
         }
-        #dice-app .btn-ghost:disabled { opacity: 0.6; cursor: wait; }
+        #dice-app .btn-ghost:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #dice-app .spin-icon { animation: spin 0.8s linear infinite; }
-        #dice-app .hover-rotate { transition: transform 0.3s; }
-        #dice-app .btn-primary:hover:not(:disabled) .hover-rotate { transform: rotate(45deg); }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        #dice-app .spin-icon {
+            animation: spin 0.8s linear infinite;
+        }
+        #dice-app .hover-rotate {
+            transition: transform 0.3s;
+        }
+        #dice-app .btn-primary:hover:not(:disabled) .hover-rotate {
+            transform: rotate(45deg);
+        }
 
         #dice-app .history {
-            margin-top: 1rem;
+            margin-top: 0.75rem;
             border: 1px solid var(--border);
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(8px);
             border-radius: 1.25rem;
             overflow: hidden;
         }
-        @media (min-width: 640px) { #dice-app .history { margin-top: 1.5rem; border-radius: 1.75rem; } }
+        @media (min-width: 640px) {
+            #dice-app .history {
+                margin-top: 1.5rem;
+                border-radius: 1.75rem;
+            }
+        }
 
         #dice-app .history-head {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
             border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 0.25rem;
         }
-        @media (min-width: 640px) { #dice-app .history-head { padding: 1rem 1.5rem; } }
+        @media (min-width: 640px) {
+            #dice-app .history-head {
+                padding: 1rem 1.5rem;
+            }
+        }
 
         #dice-app .history-title {
             font-family: "Cormorant Garamond", Georgia, serif;
             font-weight: 500;
-            font-size: 1.25rem;
+            font-size: 1rem;
             margin: 0;
         }
-        @media (min-width: 640px) { #dice-app .history-title { font-size: 1.5rem; } }
+        @media (min-width: 640px) {
+            #dice-app .history-title {
+                font-size: 1.5rem;
+            }
+        }
         #dice-app .history-sub {
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--ink-soft);
         }
-        @media (min-width: 640px) { #dice-app .history-sub { font-size: 12px; } }
+        @media (min-width: 640px) {
+            #dice-app .history-sub {
+                font-size: 12px;
+            }
+        }
 
         #dice-app .history-clear {
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--ink-soft);
             transition: color 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
-        @media (min-width: 640px) { #dice-app .history-clear { font-size: 12px; } }
-        #dice-app .history-clear:hover { color: var(--accent-deep); }
+        @media (min-width: 640px) {
+            #dice-app .history-clear {
+                font-size: 12px;
+            }
+        }
+        #dice-app .history-clear:hover {
+            color: var(--accent-deep);
+        }
 
         #dice-app .history-body {
-            padding: 0.5rem 0.75rem;
-            max-height: 360px;
+            padding: 0.5rem 0.5rem;
+            max-height: 280px;
             overflow-y: auto;
         }
-        @media (min-width: 640px) { #dice-app .history-body { padding: 0.75rem 1rem; } }
-        #dice-app .history-body::-webkit-scrollbar { width: 4px; }
+        @media (min-width: 640px) {
+            #dice-app .history-body {
+                padding: 0.75rem 1rem;
+                max-height: 360px;
+            }
+        }
+        #dice-app .history-body::-webkit-scrollbar {
+            width: 4px;
+        }
         #dice-app .history-body::-webkit-scrollbar-thumb {
-            background: var(--border); border-radius: 999px;
+            background: var(--border);
+            border-radius: 999px;
         }
 
         #dice-app .history-empty {
-            padding: 2.5rem 1rem;
+            padding: 1.5rem 0.5rem;
             text-align: center;
             color: var(--ink-soft);
-            font-size: 12px;
+            font-size: 11px;
         }
-        #dice-app .history-empty-icon { font-size: 1.875rem; opacity: 0.4; margin-bottom: 0.75rem; }
+        #dice-app .history-empty-icon {
+            font-size: 1.5rem;
+            opacity: 0.4;
+            margin-bottom: 0.5rem;
+        }
         @media (min-width: 640px) {
-            #dice-app .history-empty { padding: 3rem 1.5rem; font-size: 14px; }
-            #dice-app .history-empty-icon { font-size: 2.5rem; }
+            #dice-app .history-empty {
+                padding: 3rem 1.5rem;
+                font-size: 14px;
+            }
+            #dice-app .history-empty-icon {
+                font-size: 2.5rem;
+            }
         }
 
         #dice-app .hrow {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 0.5rem;
-            padding: 0.625rem 0.75rem;
-            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.35rem;
+            padding: 0.4rem 0.5rem;
+            border-radius: 0.6rem;
             background: rgba(243, 237, 225, 0.4);
-            margin-bottom: 0.375rem;
+            margin-bottom: 0.3rem;
+            flex-wrap: wrap;
         }
         @media (min-width: 640px) {
-            #dice-app .hrow { padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 0.5rem; }
+            #dice-app .hrow {
+                padding: 0.75rem 1rem;
+                border-radius: 1rem;
+                margin-bottom: 0.5rem;
+                gap: 0.5rem;
+            }
         }
-        #dice-app .hrow-left { display: flex; align-items: center; gap: 0.5rem; min-width: 0; flex: 1; }
-        @media (min-width: 640px) { #dice-app .hrow-left { gap: 0.75rem; } }
+        #dice-app .hrow-left {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            min-width: 0;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 640px) {
+            #dice-app .hrow-left {
+                gap: 0.75rem;
+            }
+        }
 
         #dice-app .chip {
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 28px; height: 28px; padding: 0 0.375rem;
-            border: 1px solid var(--border); background: #fff;
-            border-radius: 0.375rem; font-size: 12px; font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 0.25rem;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 0.3rem;
+            font-size: 10px;
+            font-weight: 600;
         }
         @media (min-width: 640px) {
-            #dice-app .chip { min-width: 32px; height: 32px; padding: 0 0.5rem; font-size: 14px; border-radius: 0.5rem; }
+            #dice-app .chip {
+                min-width: 32px;
+                height: 32px;
+                padding: 0 0.5rem;
+                font-size: 14px;
+                border-radius: 0.5rem;
+            }
         }
-        #dice-app .chip-row { display: flex; gap: 0.25rem; flex-shrink: 0; }
-        @media (min-width: 640px) { #dice-app .chip-row { gap: 0.375rem; } }
+        #dice-app .chip-row {
+            display: flex;
+            gap: 0.15rem;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 640px) {
+            #dice-app .chip-row {
+                gap: 0.375rem;
+            }
+        }
 
         #dice-app .hrow-meta {
-            font-size: 10px; color: var(--ink-soft);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            font-size: 8px;
+            color: var(--ink-soft);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        @media (min-width: 640px) { #dice-app .hrow-meta { font-size: 12px; } }
+        @media (min-width: 640px) {
+            #dice-app .hrow-meta {
+                font-size: 12px;
+            }
+        }
 
         #dice-app .hrow-sum {
             flex-shrink: 0;
             background: rgba(124, 106, 209, 0.1);
             color: var(--accent-deep);
             border-radius: 999px;
-            padding: 0.125rem 0.625rem;
-            font-size: 12px;
+            padding: 0.1rem 0.4rem;
+            font-size: 10px;
             font-weight: 600;
         }
-        @media (min-width: 640px) { #dice-app .hrow-sum { padding: 0.25rem 0.75rem; font-size: 14px; } }
+        @media (min-width: 640px) {
+            #dice-app .hrow-sum {
+                padding: 0.25rem 0.75rem;
+                font-size: 14px;
+            }
+        }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        #dice-app .fade-in-up { animation: fadeInUp 0.35s ease-out both; }
+        #dice-app .fade-in-up {
+            animation: fadeInUp 0.35s ease-out both;
+        }
 
         #dice-app .toast {
-            position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
-            z-index: 50; pointer-events: none;
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            pointer-events: none;
         }
-        @media (min-width: 640px) { #dice-app .toast { bottom: 1.5rem; } }
+        @media (min-width: 640px) {
+            #dice-app .toast {
+                bottom: 1.5rem;
+            }
+        }
         #dice-app .toast-box {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             border: 1px solid var(--border);
             border-radius: 999px;
-            padding: 0.5rem 1rem;
-            font-size: 12px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
-            animation: toastIn 0.3s cubic-bezier(0.22,1,0.36,1) both;
+            padding: 0.4rem 0.8rem;
+            font-size: 11px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            animation: toastIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
-        @media (min-width: 640px) { #dice-app .toast-box { padding: 0.625rem 1.25rem; font-size: 14px; } }
+        @media (min-width: 640px) {
+            #dice-app .toast-box {
+                padding: 0.625rem 1.25rem;
+                font-size: 14px;
+            }
+        }
         @keyframes toastIn {
-            from { opacity: 0; transform: translate(-50%, 16px) scale(0.92); }
-            to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translate(-50%, 16px) scale(0.92);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
         }
-        #dice-app .toast-box { transform: none; }
+        #dice-app .toast-box {
+            transform: none;
+        }
 
         #dice-app .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(45, 42, 68, 0.6);
             backdrop-filter: blur(5px);
             z-index: 100;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
+            padding: 1rem;
         }
-        #dice-app .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        #dice-app .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         #dice-app .modal-content {
             background: #fff;
             padding: 1rem;
             border-radius: 1.5rem;
-            max-width: 90%; max-height: 90%;
-            display: flex; flex-direction: column; align-items: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 92%;
+            max-height: 92%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             transform: scale(0.9);
             transition: transform 0.3s ease;
         }
-        #dice-app .modal-overlay.active .modal-content { transform: scale(1); }
+        #dice-app .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
         #dice-app .modal-img {
-            max-width: 100%; max-height: 70vh;
+            max-width: 100%;
+            max-height: 60vh;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.75rem;
         }
-        #dice-app .modal-actions { display: flex; gap: 1rem; }
+        #dice-app .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
         #dice-app .modal-btn {
-            padding: 0.75rem 1.5rem; border-radius: 1rem;
-            font-weight: 600; font-size: 14px; cursor: pointer; border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
         }
-        #dice-app .modal-btn-save { background: var(--accent-deep); color: #fff; }
-        #dice-app .modal-btn-close { background: #f1f1f1; color: #333; }
+        #dice-app .modal-btn-save {
+            background: var(--accent-deep);
+            color: #fff;
+        }
+        #dice-app .modal-btn-close {
+            background: #f1f1f1;
+            color: #333;
+        }
 
-        @media (max-width: 639px) { #dice-app .hrow-meta { display: none; } }
-        @media (max-width: 360px) { #dice-app .dice-grid { gap: 0.75rem !important; } }
+        @media (max-width: 480px) {
+            #dice-app .hrow-meta {
+                display: none;
+            }
+            #dice-app .dice-grid {
+                gap: 0.5rem !important;
+            }
+        }
         @media (max-height: 500px) and (orientation: landscape) {
-            #dice-app .field { min-height: 140px !important; padding: 0.75rem 1rem !important; }
+            #dice-app .field {
+                min-height: 120px !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+            #dice-app .sum-badge {
+                font-size: 7px;
+                padding: 0.1rem 0.3rem;
+            }
+            #dice-app .die .ground-shadow {
+                display: none;
+            }
         }
 
         /* ===== Стили для расклада (layout-app) ===== */
@@ -864,14 +1450,19 @@
             animation: rainbowShiftFallback 10s ease infinite;
         }
         @keyframes rainbowShiftFallback {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
+            0% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+            100% {
+                background-position: 0% 50%
+            }
         }
-        /* Оптимизация рубашек карт – чёткое отображение */
         #layout-app .card-back-img {
-            image-rendering: crisp-edges; /* для чёткости */
-            image-rendering: pixelated;    /* дополнительно */
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
             object-fit: cover;
         }
 
@@ -897,16 +1488,36 @@
             background: linear-gradient(135deg, #fce4ec, #f3e5f5, #ede7f6, #e8eaf6, #e3f2fd, #e0f7fa, #e0f2f1, #f1f8e9);
         }
         @keyframes modalPop {
-            0% { opacity: 0; transform: scale(0.5) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
-        #roulette-app ::-webkit-scrollbar { width: 6px; }
-        #roulette-app ::-webkit-scrollbar-track { background: transparent; }
-        #roulette-app ::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.22); border-radius: 3px; }
-        #roulette-app ::-webkit-scrollbar-thumb:hover { background: rgba(124, 58, 237, 0.34); }
+        #roulette-app ::-webkit-scrollbar {
+            width: 6px;
+        }
+        #roulette-app ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #roulette-app ::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.22);
+            border-radius: 3px;
+        }
+        #roulette-app ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.34);
+        }
 
-        #roulette-app .dragging { opacity: 0.4; }
-        #roulette-app .drag-over { background: rgba(124, 58, 237, 0.15); border-radius: 0.75rem; }
+        #roulette-app .dragging {
+            opacity: 0.4;
+        }
+        #roulette-app .drag-over {
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 0.75rem;
+        }
 
         /* ===== Стили для КНБ (rps-app) ===== */
         #rps-app {
@@ -919,14 +1530,14 @@
             transition: all 0.2s;
             cursor: pointer;
             border-radius: 1rem;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(8px);
-            border: 2px solid rgba(255,255,255,0.6);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
         #rps-app .rps-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
         #rps-app .rps-card.selected {
             border-color: #7c6ad1;
@@ -938,19 +1549,22 @@
             background: rgba(249, 168, 212, 0.15);
         }
         #rps-app .arena-card {
-            min-height: 120px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            background: rgba(255,255,255,0.3);
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(8px);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        @media (max-width: 640px) {
-            #rps-app .arena-card { min-height: 80px; font-size: 2.5rem; }
+        @media (min-width: 640px) {
+            #rps-app .arena-card {
+                min-height: 150px;
+                font-size: 4rem;
+            }
         }
 
         /* ===== Общий футер ===== */
@@ -961,7 +1575,7 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid rgba(255, 255, 255, 0.48);
-            padding: 1rem 0;
+            padding: 0.75rem 0;
             margin-top: auto;
         }
         .app-footer .footer-content {
@@ -969,43 +1583,47 @@
             margin: 0 auto;
             padding: 0 1rem;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: rgba(107, 102, 128, 0.7);
         }
         @media (min-width: 640px) {
-            .app-footer .footer-content { font-size: 0.875rem; }
+            .app-footer .footer-content {
+                font-size: 0.875rem;
+            }
         }
 
         /* ===== Дополнительная мобильная оптимизация ===== */
         @media (max-width: 480px) {
-            .btn-primary, .btn-secondary, .btn-ghost {
-                padding: 0.625rem 0.875rem;
-                font-size: 12px;
+            .btn-primary,
+            .btn-secondary,
+            .btn-ghost {
+                padding: 0.5rem 0.7rem;
+                font-size: 11px;
             }
             .app-header .header-title {
-                font-size: 1.25rem;
+                font-size: 1.1rem;
             }
             .app-header .header-subtitle {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .app-header .icon-wrapper {
-                width: 2.5rem;
-                height: 2.5rem;
+                width: 2rem;
+                height: 2rem;
             }
             .app-header .icon-wrapper svg {
-                width: 1.25rem;
-                height: 1.25rem;
+                width: 1rem;
+                height: 1rem;
             }
             .app-header .mode-switcher button {
-                font-size: 0.75rem;
-                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
             }
             .app-header .back-btn {
-                padding: 0.25rem 0.5rem;
+                padding: 0.2rem 0.4rem;
             }
             .app-header .back-btn svg {
-                width: 1.25rem;
-                height: 1.25rem;
+                width: 1rem;
+                height: 1rem;
             }
         }
     </style>
@@ -1126,7 +1744,7 @@
                     tg.setBackgroundColor("#fce4ec");
                 } catch (e) {}
             }
-            window._tg = tg; // сохраняем глобально
+            window._tg = tg;
         })();
 
         // ===== Функции переключения страниц =====
@@ -1159,7 +1777,6 @@
                 if (!layoutRoot) {
                     var container = document.getElementById('layout-app');
                     layoutRoot = ReactDOM.createRoot(container);
-                    // Рендерим компонент LayoutApp (определён ниже в Babel)
                     layoutRoot.render(React.createElement(LayoutApp));
                 }
                 currentPage = 'layout';
@@ -1168,7 +1785,6 @@
                 if (!diceRoot) {
                     var container = document.getElementById('dice-app');
                     diceRoot = ReactDOM.createRoot(container);
-                    // Рендерим компонент DiceApp (определён ниже в Babel)
                     diceRoot.render(React.createElement(DiceApp));
                 }
                 currentPage = 'dice';
@@ -1177,7 +1793,6 @@
                 if (!rouletteRoot) {
                     var container = document.getElementById('roulette-app');
                     rouletteRoot = ReactDOM.createRoot(container);
-                    // Рендерим компонент RouletteApp (определён ниже в Babel)
                     rouletteRoot.render(React.createElement(RouletteApp));
                 }
                 currentPage = 'roulette';
@@ -1186,7 +1801,6 @@
                 if (!rpsRoot) {
                     var container = document.getElementById('rps-app');
                     rpsRoot = ReactDOM.createRoot(container);
-                    // Рендерим компонент RPSApp (определён ниже в Babel)
                     rpsRoot.render(React.createElement(RPSApp));
                 }
                 currentPage = 'rps';
@@ -1198,11 +1812,10 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo, useCallback, forwardRef, useImperativeHandle, useRef } = React;
 
-        // Компонент Button (переиспользуемый)
         function Button({ children, variant = 'primary', className = '', disabled, onClick, ...props }) {
             const baseClass = variant === 'primary' ? 'btn-primary' :
-                              variant === 'secondary' ? 'btn-secondary' :
-                              'btn-ghost';
+                variant === 'secondary' ? 'btn-secondary' :
+                'btn-ghost';
             return React.createElement('button', {
                 className: baseClass + ' ' + className,
                 disabled,
@@ -1211,7 +1824,6 @@
             }, children);
         }
 
-        // Компонент Modal (общий)
         function Modal({ isOpen, onClose, children }) {
             if (!isOpen) return null;
             return React.createElement('div', {
@@ -1224,39 +1836,41 @@
             }, children));
         }
 
-        // Компонент Header (общий)
         function Header({ title, subtitle, icon, extra, onBack }) {
             return React.createElement('header', {
                 className: 'relative z-10 glass border-b border-white/10 app-header'
             }, React.createElement('div', {
-                className: 'max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'
+                className: 'max-w-6xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between'
             }, [
                 React.createElement('div', {
                     key: 'left',
-                    className: 'flex items-center gap-3'
+                    className: 'flex items-center gap-2 sm:gap-3 min-w-0'
                 }, [
                     icon && React.createElement('div', {
                         key: 'icon',
-                        className: 'icon-wrapper w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-sky-300 flex items-center justify-center shadow-lg shadow-violet-400/25 ring-1 ring-white/40'
+                        className: 'icon-wrapper w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-violet-300 to-sky-300 flex items-center justify-center shadow-lg shadow-violet-400/25 ring-1 ring-white/40 flex-shrink-0'
                     }, icon),
-                    React.createElement('div', { key: 'text' }, [
+                    React.createElement('div', {
+                        key: 'text',
+                        className: 'min-w-0'
+                    }, [
                         React.createElement('h1', {
-                            className: 'header-title text-xl font-bold text-slate-700 tracking-tight'
+                            className: 'header-title text-base sm:text-xl font-bold text-slate-700 tracking-tight truncate'
                         }, title),
                         subtitle && React.createElement('p', {
-                            className: 'header-subtitle text-xs text-slate-500'
+                            className: 'header-subtitle text-[10px] sm:text-xs text-slate-500 truncate'
                         }, subtitle)
                     ])
                 ]),
                 React.createElement('div', {
                     key: 'right',
-                    className: 'flex items-center gap-2'
+                    className: 'flex items-center gap-1 sm:gap-2 flex-shrink-0'
                 }, [
                     extra && React.createElement('div', { key: 'extra' }, extra),
                     React.createElement('button', {
                         key: 'back',
                         onClick: onBack,
-                        className: 'back-btn bg-white/30 backdrop-blur rounded-full p-2 shadow-sm border border-white/40 hover:bg-white/50 transition-colors text-slate-600',
+                        className: 'back-btn bg-white/30 backdrop-blur rounded-full p-1.5 sm:p-2 shadow-sm border border-white/40 hover:bg-white/50 transition-colors text-slate-600',
                         'aria-label': 'Назад'
                     }, React.createElement('svg', {
                         viewBox: '0 0 24 24',
@@ -1265,13 +1879,12 @@
                         strokeWidth: '2',
                         strokeLinecap: 'round',
                         strokeLinejoin: 'round',
-                        className: 'w-5 h-5'
+                        className: 'w-4 h-4 sm:w-5 sm:h-5'
                     }, React.createElement('path', { d: 'M19 12H5M12 19l-7-7 7-7' })))
                 ])
             ]));
         }
 
-        // Компонент Footer (общий)
         function Footer() {
             return React.createElement('footer', {
                 className: 'app-footer'
@@ -1281,7 +1894,7 @@
         }
     </script>
 
-    <!-- ===== Код кубиков (React) с фиксированной шириной ===== -->
+    <!-- ===== Код кубиков (React) — АДАПТИВНАЯ ВЕРСИЯ ===== -->
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
@@ -1321,9 +1934,9 @@
 
         function dieHTML(value, idx, size, rolling, flat) {
             if (flat) {
-                return `<div class="die" style="width:${size}px">
-                            <div class="flat-face" style="width:${size}px;height:${size}px">${faceDotsHTML(value)}</div>
-                            <div class="ground-shadow" style="width:${size*0.55}px;height:${size*0.07}px;margin-top:${size*0.08}px"></div>
+                return `<div class="die" style="width:${size}px;flex-shrink:0;">
+                            <div class="flat-face" style="width:${size}px;height:${size}px;">${faceDotsHTML(value)}</div>
+                            <div class="ground-shadow" style="width:${size*0.5}px;height:${size*0.06}px;margin-top:${size*0.06}px;"></div>
                         </div>`;
             }
             const { rx, ry } = FACE_TO_FRONT[value] || FACE_TO_FRONT[1];
@@ -1331,17 +1944,17 @@
             const dir = idx % 2 === 0 ? 1 : -1;
             const delay = idx * 200;
             const cubeStyle = rolling ?
-                `width:${size}px;height:${size}px;transform:rotateX(0deg) rotateY(0deg)` :
-                `width:${size}px;height:${size}px;transform:rotateX(${rx}deg) rotateY(${ry}deg)`;
+                `width:${size}px;height:${size}px;transform:rotateX(0deg) rotateY(0deg);` :
+                `width:${size}px;height:${size}px;transform:rotateX(${rx}deg) rotateY(${ry}deg);`;
             let facesHTML = "";
             for (const { cls, n } of FACES) {
-                facesHTML += `<div class="cube-face cube-face--${cls}" style="--hs:${hs}px">${faceDotsHTML(n)}</div>`;
+                facesHTML += `<div class="cube-face cube-face--${cls}" style="--hs:${hs}px;">${faceDotsHTML(n)}</div>`;
             }
-            return `<div class="die" style="width:${size}px">
-                        <div class="die-scene" style="width:${size}px;height:${size}px">
-                            <div class="die-preserve-3d ${rolling ? "anim-throw" : ""}" style="${rolling ? `--dir:${dir};animation-delay:${delay}ms;` : ''}width:${size}px;height:${size}px">
+            return `<div class="die" style="width:${size}px;flex-shrink:0;">
+                        <div class="die-scene" style="width:${size}px;height:${size}px;">
+                            <div class="die-preserve-3d ${rolling ? "anim-throw" : ""}" style="${rolling ? `--dir:${dir};animation-delay:${delay}ms;` : ''}width:${size}px;height:${size}px;">
                                 <div class="die-preserve-3d ${rolling ? "anim-spin" : ""}" style="${rolling ? `animation-delay:${delay}ms;` : ''}">
-                                    <div class="die-preserve-3d ${rolling ? "anim-orient" : ""}" style="${rolling ? `animation-delay:${delay}ms;` : ''}width:${size}px;height:${size}px;--frx:${rx}deg;--fry:${ry}deg">
+                                    <div class="die-preserve-3d ${rolling ? "anim-orient" : ""}" style="${rolling ? `animation-delay:${delay}ms;` : ''}width:${size}px;height:${size}px;--frx:${rx}deg;--fry:${ry}deg;">
                                         <div class="cube" style="${cubeStyle}">
                                             ${facesHTML}
                                         </div>
@@ -1349,7 +1962,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="ground-shadow ${rolling ? "anim-shadow" : ""}" style="width:${size*0.55}px;height:${size*0.07}px;margin-top:${-size*0.03}px;${rolling ? `animation-delay:${delay}ms;` : ''}"></div>
+                        <div class="ground-shadow ${rolling ? "anim-shadow" : ""}" style="width:${size*0.5}px;height:${size*0.06}px;margin-top:${-size*0.02}px;${rolling ? `animation-delay:${delay}ms;` : ''}"></div>
                     </div>`;
         }
 
@@ -1364,6 +1977,8 @@
             const [snapshotUrl, setSnapshotUrl] = useState(null);
             const [showSnapshotModal, setShowSnapshotModal] = useState(false);
             const ROLL_DURATION = 3000;
+            const gridRef = useRef(null);
+            const fieldRef = useRef(null);
 
             // Telegram haptic
             const haptic = useCallback((style) => {
@@ -1382,19 +1997,27 @@
                 } catch (e) {}
             }, []);
 
-            // Утилиты размера кубика
+            // Расчёт размера кубика — адаптивный, с учётом контейнера
             const dieSize = useCallback(() => {
                 const w = window.innerWidth;
                 const h = window.innerHeight;
-                if (h < 500) return Math.min(72, Math.floor((h - 120) / count));
-                if (w < 380) return Math.floor(Math.min((w - 80) / count, 85));
-                if (w < 640) return Math.floor(Math.min((w - 100) / count, 100));
-                return 110;
+                const maxContainerWidth = Math.min(w - 32, 440);
+                const maxSize = Math.floor((maxContainerWidth - (count - 1) * 16) / count);
+                let size = Math.max(42, Math.min(110, maxSize));
+
+                if (h < 500) {
+                    size = Math.min(size, Math.floor((h - 100) / count));
+                }
+                if (w < 380) {
+                    size = Math.min(size, Math.floor((w - 48) / count));
+                }
+                return Math.max(36, size);
             }, [count]);
 
+            // Рендер кубиков
             const renderDice = useCallback((diceValues, rollingState, snapshottingState) => {
                 const size = dieSize();
-                const gridEl = document.getElementById('dice-grid');
+                const gridEl = gridRef.current;
                 if (!gridEl) return;
                 let html = '';
                 for (let i = 0; i < diceValues.length; i++) {
@@ -1405,17 +2028,7 @@
                 if (sumBadge) {
                     sumBadge.textContent = diceValues.reduce((a, b) => a + b, 0);
                 }
-                // Фиксированная ширина как для 3 кубиков (не зависит от count)
-                const gap = 20; // 1.25rem в пикселях (стандартный отступ)
-                const gridWidth = 3 * size + 2 * gap;
-                gridEl.style.width = gridWidth + 'px';
-                // Чтобы поле не сжималось, зададим min-width для контейнера field
-                const fieldEl = document.getElementById('dice-field');
-                if (fieldEl) {
-                    // Получим padding из CSS (примерно)
-                    const padding = window.innerWidth >= 640 ? 40 : 32; // 2.5rem или 2rem
-                    fieldEl.style.minWidth = (gridWidth + 2 * padding) + 'px';
-                }
+                // Никаких принудительных ширин — flex сам всё выравнивает
             }, [dieSize]);
 
             // Первоначальный рендер
@@ -1424,10 +2037,21 @@
                 // eslint-disable-next-line
             }, []);
 
-            // Обновление при изменении dice, rolling, snapshotting
+            // Обновление при изменении данных
             useEffect(() => {
                 renderDice(dice, rolling, snapshotting);
             }, [dice, rolling, snapshotting, renderDice]);
+
+            // Пересчёт размера при ресайзе
+            useEffect(() => {
+                const handleResize = () => {
+                    if (!rolling && !snapshotting) {
+                        renderDice(dice, rolling, snapshotting);
+                    }
+                };
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, [rolling, snapshotting, dice, renderDice]);
 
             // История
             const renderHistory = useCallback(() => {
@@ -1438,16 +2062,16 @@
                 if (!historyBody) return;
 
                 if (history.length === 0) {
-                    historyEmpty.style.display = '';
+                    if (historyEmpty) historyEmpty.style.display = '';
                     const rows = historyBody.querySelectorAll('.hrow');
                     rows.forEach(r => r.remove());
-                    historySub.textContent = 'пока пусто';
-                    btnClear.style.display = 'none';
+                    if (historySub) historySub.textContent = 'пока пусто';
+                    if (btnClear) btnClear.style.display = 'none';
                     return;
                 }
-                historyEmpty.style.display = 'none';
-                btnClear.style.display = '';
-                historySub.textContent = `${history.length} ${plural(history.length)}`;
+                if (historyEmpty) historyEmpty.style.display = 'none';
+                if (btnClear) btnClear.style.display = '';
+                if (historySub) historySub.textContent = `${history.length} ${plural(history.length)}`;
 
                 const existing = historyBody.querySelectorAll('.hrow');
                 existing.forEach(e => e.remove());
@@ -1460,12 +2084,12 @@
                         chips += `<span class="chip">${v}</span>`;
                     }
                     row.innerHTML = `
-                        <div class="hrow-left">
-                            <div class="chip-row">${chips}</div>
-                            <span class="hrow-meta">#${item.id} · ${item.timestamp}</span>
-                        </div>
-                        <div class="hrow-sum">Σ ${item.total}</div>
-                    `;
+                            <div class="hrow-left">
+                                <div class="chip-row">${chips}</div>
+                                <span class="hrow-meta">#${item.id} · ${item.timestamp}</span>
+                            </div>
+                            <div class="hrow-sum">Σ ${item.total}</div>
+                        `;
                     historyBody.appendChild(row);
                 }
             }, [history]);
@@ -1521,7 +2145,6 @@
                     }
                     return prev;
                 });
-                // Обновим сегменты
                 const segEl = document.getElementById('dice-seg');
                 if (segEl) {
                     segEl.querySelectorAll('button').forEach(b => {
@@ -1543,13 +2166,13 @@
                 window.setTimeout(() => setToastMessage(null), 2200);
             }, []);
 
-            // Снимок экрана (canvas)
+            // Снимок экрана (canvas) — адаптирован под размеры
             const drawToCanvas = useCallback((diceValues, size) => {
-                const gap = 40;
-                const padding = 60;
+                const gap = Math.max(16, size * 0.25);
+                const padding = Math.max(30, size * 0.5);
                 const n = diceValues.length;
                 const W = padding * 2 + n * size + (n - 1) * gap;
-                const H = 260;
+                const H = Math.max(180, size * 2.2);
                 const DPR = 2;
 
                 const canvas = document.createElement("canvas");
@@ -1583,7 +2206,7 @@
                 ctx.shadowBlur = 40;
                 ctx.shadowOffsetY = 10;
                 ctx.fillStyle = "rgba(255,255,255,0.8)";
-                roundRect(ctx, 20, 20, W - 40, H - 40, 24);
+                roundRect(ctx, 16, 16, W - 32, H - 32, 20);
                 ctx.fill();
                 ctx.restore();
 
@@ -1601,19 +2224,19 @@
                 ctx.fillStyle = "#6b6680";
                 const txt = "Σ " + total;
                 const tw = ctx.measureText(txt).width;
-                const bx = W - 40 - tw - 16;
-                const by = 36;
+                const bx = W - 28 - tw - 14;
+                const by = 30;
                 ctx.fillStyle = "rgba(255,255,255,0.9)";
-                roundRect(ctx, bx, by, tw + 16, 22, 11);
+                roundRect(ctx, bx, by, tw + 14, 20, 10);
                 ctx.fill();
                 ctx.strokeStyle = "#e8dfd1";
                 ctx.stroke();
                 ctx.fillStyle = "#6b6680";
                 ctx.textBaseline = "middle";
-                ctx.fillText("Σ ", bx + 8, by + 11);
+                ctx.fillText("Σ ", bx + 7, by + 10);
                 ctx.fillStyle = "#2d2a44";
                 ctx.font = "600 11px Inter, sans-serif";
-                ctx.fillText(total, bx + 8 + ctx.measureText("Σ ").width, by + 11);
+                ctx.fillText(total, bx + 7 + ctx.measureText("Σ ").width, by + 10);
                 ctx.restore();
 
                 return canvas;
@@ -1638,11 +2261,11 @@
                 ctx.fill();
                 ctx.restore();
 
-                // Face rounded rect
+                // Face
                 ctx.save();
-                ctx.shadowColor = "rgba(79,70,229,0.15)";
-                ctx.shadowBlur = 18;
-                ctx.shadowOffsetY = 10;
+                ctx.shadowColor = "rgba(79,70,229,0.12)";
+                ctx.shadowBlur = 14;
+                ctx.shadowOffsetY = 8;
                 const g = ctx.createLinearGradient(x, y, x + size, y + size);
                 g.addColorStop(0, "#fffdf7");
                 g.addColorStop(1, "#f5f0e6");
@@ -1687,9 +2310,7 @@
                 if (btnSnapshotText) btnSnapshotText.textContent = 'Сохраняю…';
 
                 try {
-                    // Сначала показываем кубики в flat-режиме (снимок)
                     setSnapshotting(true);
-                    // Ждём рендер
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
                             const size = dieSize();
@@ -1727,7 +2348,7 @@
                 }
             }, [rolling, snapshotting, dice, dieSize, drawToCanvas, haptic, hapticOk, showToast]);
 
-            // Инициализация сегментов (кнопок количества)
+            // Инициализация сегментов
             useEffect(() => {
                 const segEl = document.getElementById('dice-seg');
                 if (segEl) {
@@ -1753,17 +2374,6 @@
                 };
             }, [roll, takeSnapshot, clearHistory]);
 
-            // Обработка resize
-            useEffect(() => {
-                const handleResize = () => {
-                    if (!rolling) {
-                        renderDice(dice, rolling, snapshotting);
-                    }
-                };
-                window.addEventListener('resize', handleResize);
-                return () => window.removeEventListener('resize', handleResize);
-            }, [rolling, snapshotting, dice, renderDice]);
-
             // Инициализация года
             useEffect(() => {
                 const yearEl = document.getElementById('dice-year');
@@ -1781,7 +2391,6 @@
             return React.createElement('div', {
                 className: 'min-h-screen gradient-bg flex flex-col relative overflow-hidden'
             }, [
-                // Шапка (растянута на всю ширину, вне wrap)
                 React.createElement(Header, {
                     key: 'header',
                     title: 'Магические кубики',
@@ -1803,28 +2412,56 @@
                     }
                 }),
 
-                // Остальной контент внутри .wrap
                 React.createElement('div', {
                     key: 'wrap',
                     className: 'wrap'
                 }, [
                     React.createElement('section', { key: 'section' }, [
-                        React.createElement('div', { key: 'field', className: 'field', id: 'dice-field' }, [
-                            React.createElement('div', { key: 'grid', className: 'dice-grid', id: 'dice-grid' }),
-                            React.createElement('div', { key: 'badge', className: 'sum-badge' }, 'Σ ', React.createElement('b', { id: 'dice-sumBadge' }, '0'))
+                        React.createElement('div', {
+                            key: 'field',
+                            className: 'field',
+                            ref: fieldRef,
+                            id: 'dice-field'
+                        }, [
+                            React.createElement('div', {
+                                key: 'grid',
+                                className: 'dice-grid',
+                                ref: gridRef,
+                                id: 'dice-grid'
+                            }),
+                            React.createElement('div', {
+                                key: 'badge',
+                                className: 'sum-badge'
+                            }, 'Σ ', React.createElement('b', { id: 'dice-sumBadge' }, '0'))
                         ])
                     ]),
 
-                    React.createElement('section', { key: 'panel', className: 'panel' }, [
-                        React.createElement('div', { key: 'row', className: 'row' }, [
-                            React.createElement('div', { key: 'label', className: 'label' }, 'Кубиков'),
-                            React.createElement('div', { key: 'seg', className: 'seg', id: 'dice-seg' }, [
+                    React.createElement('section', {
+                        key: 'panel',
+                        className: 'panel'
+                    }, [
+                        React.createElement('div', {
+                            key: 'row',
+                            className: 'row'
+                        }, [
+                            React.createElement('div', {
+                                key: 'label',
+                                className: 'label'
+                            }, 'Кубиков'),
+                            React.createElement('div', {
+                                key: 'seg',
+                                className: 'seg',
+                                id: 'dice-seg'
+                            }, [
                                 React.createElement('button', { key: '1', 'data-count': '1', className: 'active' }, '1'),
                                 React.createElement('button', { key: '2', 'data-count': '2' }, '2'),
                                 React.createElement('button', { key: '3', 'data-count': '3' }, '3')
                             ])
                         ]),
-                        React.createElement('div', { key: 'actions', className: 'actions' }, [
+                        React.createElement('div', {
+                            key: 'actions',
+                            className: 'actions'
+                        }, [
                             React.createElement('button', {
                                 key: 'roll',
                                 className: 'btn btn-primary' + (rolling ? ' rolling' : ''),
@@ -1849,7 +2486,10 @@
                                     React.createElement('circle', { cx: '15.5', cy: '8.5', r: '1.2', fill: 'currentColor' }),
                                     React.createElement('circle', { cx: '8.5', cy: '15.5', r: '1.2', fill: 'currentColor' })
                                 ]),
-                                React.createElement('span', { key: 'text', id: 'dice-btnRollText' }, rolling ? 'Летят…' : 'Бросить')
+                                React.createElement('span', {
+                                    key: 'text',
+                                    id: 'dice-btnRollText'
+                                }, rolling ? 'Летят…' : 'Бросить')
                             ]),
                             React.createElement('button', {
                                 key: 'snapshot',
@@ -1870,23 +2510,48 @@
                                     React.createElement('path', { d: 'M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z' }),
                                     React.createElement('circle', { cx: '12', cy: '13', r: '4' })
                                 ]),
-                                React.createElement('span', { key: 'text', id: 'dice-btnSnapshotText' }, snapshotting ? 'Сохраняю…' : 'Снимок')
+                                React.createElement('span', {
+                                    key: 'text',
+                                    id: 'dice-btnSnapshotText'
+                                }, snapshotting ? 'Сохраняю…' : 'Снимок')
                             ])
                         ])
                     ]),
 
-                    React.createElement('section', { key: 'history', className: 'history' }, [
-                        React.createElement('div', { key: 'head', className: 'history-head' }, [
+                    React.createElement('section', {
+                        key: 'history',
+                        className: 'history'
+                    }, [
+                        React.createElement('div', {
+                            key: 'head',
+                            className: 'history-head'
+                        }, [
                             React.createElement('div', { key: 'left' }, [
                                 React.createElement('h2', { key: 'title', className: 'history-title' }, 'История бросков'),
-                                React.createElement('p', { key: 'sub', className: 'history-sub', id: 'dice-historySub' }, 'пока пусто')
+                                React.createElement('p', { key: 'sub', className: 'history-sub', id: 'dice-historySub' },
+                                    'пока пусто')
                             ]),
-                            React.createElement('button', { key: 'clear', className: 'history-clear', id: 'dice-btnClear', style: { display: 'none' }, onClick: clearHistory }, 'Очистить')
+                            React.createElement('button', {
+                                key: 'clear',
+                                className: 'history-clear',
+                                id: 'dice-btnClear',
+                                style: { display: 'none' },
+                                onClick: clearHistory
+                            }, 'Очистить')
                         ]),
-                        React.createElement('div', { key: 'body', className: 'history-body', id: 'dice-historyBody' }, [
-                            React.createElement('div', { key: 'empty', className: 'history-empty', id: 'dice-historyEmpty' }, [
+                        React.createElement('div', {
+                            key: 'body',
+                            className: 'history-body',
+                            id: 'dice-historyBody'
+                        }, [
+                            React.createElement('div', {
+                                key: 'empty',
+                                className: 'history-empty',
+                                id: 'dice-historyEmpty'
+                            }, [
                                 React.createElement('div', { key: 'icon', className: 'history-empty-icon' }, '🎲'),
-                                React.createElement('div', { key: 'text' }, 'Сделайте первый бросок — и здесь появятся записи')
+                                React.createElement('div', { key: 'text' },
+                                    'Сделайте первый бросок — и здесь появятся записи')
                             ])
                         ])
                     ]),
@@ -1897,7 +2562,7 @@
         }
     </script>
 
-    <!-- ===== Код расклада (React) – стабильная версия без автообновления ===== -->
+    <!-- ===== Код расклада (React) ===== -->
     <script type="text/babel">
         const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
@@ -1974,7 +2639,6 @@
             const gridConfig = useMemo(() => GRID_OPTIONS.find(o => o.value === gridValue), [gridValue]);
             const totalSpecial = winCount + burnCount;
 
-            // Загружаем рубашку один раз при старте
             useEffect(() => {
                 let isMounted = true;
                 fetch(CARD_BACK_URL)
@@ -2032,10 +2696,7 @@
                 setLayoutKey(prev => prev + 1);
             }, [gridConfig, winCount, burnCount, winText, burnText, totalSpecial]);
 
-            // Первый расклад при загрузке — только один раз
             useEffect(() => { generateLayout(); }, []);
-
-            // Смена сетки – только по кнопке, без автообновления
 
             const handleCardClick = (id) => {
                 setCards(prev => prev.map(c => c.id === id ? { ...c, isOpen: !c.isOpen } : c));
@@ -2299,7 +2960,7 @@
         }
     </script>
 
-    <!-- ===== Код рулетки (React) с переключателем 1/2 рулетки ===== -->
+    <!-- ===== Код рулетки (React) ===== -->
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } = React;
 
@@ -2364,7 +3025,6 @@
             }
         }
 
-        // SpinWheel с возможностью внешнего управления
         const SpinWheel = forwardRef(function SpinWheel({ items, onSpinEnd, disabled, externalControl }, ref) {
             const canvasRef = useRef(null);
             const containerRef = useRef(null);
@@ -2500,7 +3160,8 @@
                 const arcSize = (2 * Math.PI) / items.length;
                 const targetRotation = -(targetSegment + 0.5) * arcSize;
                 const extraRotations = 5 + Math.floor(Math.random() * 6);
-                const finalRotation = rotationRef.current + extraRotations * 2 * Math.PI + (targetRotation - (rotationRef.current % (2 * Math.PI)));
+                const finalRotation = rotationRef.current + extraRotations * 2 * Math.PI + (targetRotation - (rotationRef
+                    .current % (2 * Math.PI)));
 
                 const startRotation = rotationRef.current;
                 const totalRotation = finalRotation - startRotation;
@@ -2718,9 +3379,9 @@
             };
 
             const parseParticipantText = (text) => {
-                const parts = text.includes("@")
-                    ? text.split(/[\s,]+/)
-                    : text.split(/[\n,]+/);
+                const parts = text.includes("@") ?
+                    text.split(/[\s,]+/) :
+                    text.split(/[\n,]+/);
                 return parts.map((label) => label.trim()).filter(Boolean);
             };
 
@@ -3063,27 +3724,24 @@
 
         function RouletteApp() {
             const { hapticSuccess } = useTelegramMiniApp();
-            const [mode, setMode] = useState('single'); // 'single' или 'double'
+            const [mode, setMode] = useState('single');
 
-            // Данные
             const [participants, setParticipants] = useState(() => loadItems(STORAGE_KEY_PARTICIPANTS));
             const [prizes, setPrizes] = useState(() => loadItems(STORAGE_KEY_PRIZES));
 
-            // Рефы для колес
             const wheelRefParticipants = useRef(null);
             const wheelRefPrizes = useRef(null);
 
             const [winnerParticipant, setWinnerParticipant] = useState(null);
             const [winnerPrize, setWinnerPrize] = useState(null);
             const [showModal, setShowModal] = useState(false);
-            const [history, setHistory] = useState([]); // для одной рулетки (история участников)
-            const [doubleHistory, setDoubleHistory] = useState([]); // история для двух рулеток
+            const [history, setHistory] = useState([]);
+            const [doubleHistory, setDoubleHistory] = useState([]);
             const [isSpinning, setIsSpinning] = useState(false);
-            const [expectedSpinCount, setExpectedSpinCount] = useState(0); // 0, 1, 2
+            const [expectedSpinCount, setExpectedSpinCount] = useState(0);
             const [spinCount, setSpinCount] = useState(0);
             const [spinResults, setSpinResults] = useState({ participant: null, prize: null });
 
-            // Сохраняем в localStorage при изменении
             useEffect(() => {
                 localStorage.setItem(STORAGE_KEY_PARTICIPANTS, JSON.stringify(participants));
             }, [participants]);
@@ -3144,7 +3802,6 @@
                 }, 200);
             }, []);
 
-            // Обработка окончания вращения в single режиме
             const handleSingleSpinEnd = useCallback((winner) => {
                 setWinnerParticipant(winner);
                 setWinnerPrize(null);
@@ -3155,7 +3812,6 @@
                 setIsSpinning(false);
             }, [fireConfetti, hapticSuccess]);
 
-            // Для double режима - сбор результатов от обоих колес
             const handleParticipantSpinEnd = useCallback((winner) => {
                 setSpinResults(prev => ({ ...prev, participant: winner }));
                 setSpinCount(prev => prev + 1);
@@ -3166,11 +3822,9 @@
                 setSpinCount(prev => prev + 1);
             }, []);
 
-            // Когда все ожидаемые колеса остановились
             useEffect(() => {
                 if (mode === 'double' && spinCount === expectedSpinCount && expectedSpinCount > 0) {
                     const { participant, prize } = spinResults;
-                    // Если ожидали одно колесо, то только один результат
                     if (expectedSpinCount === 1) {
                         if (participant) {
                             setWinnerParticipant(participant);
@@ -3178,7 +3832,6 @@
                             setShowModal(true);
                             fireConfetti();
                             hapticSuccess();
-                            // добавляем в историю
                             setDoubleHistory(prev => [{ participant: participant, prize: null }, ...prev]);
                         } else if (prize) {
                             setWinnerParticipant(null);
@@ -3189,7 +3842,6 @@
                             setDoubleHistory(prev => [{ participant: null, prize: prize }, ...prev]);
                         }
                     } else if (expectedSpinCount === 2) {
-                        // оба колеса
                         if (participant && prize) {
                             setWinnerParticipant(participant);
                             setWinnerPrize(prize);
@@ -3220,7 +3872,6 @@
                 }
             };
 
-            // Запуск вращения в double режиме
             const spinDouble = useCallback((which) => {
                 if (isSpinning) return;
                 if (which === 'participant' && participants.length < 2) {
@@ -3255,7 +3906,6 @@
                 }
             }, [isSpinning, participants, prizes]);
 
-            // Очистка всего (участники, призы, история)
             const clearAll = useCallback(() => {
                 setParticipants([]);
                 setPrizes([]);
@@ -3281,7 +3931,6 @@
                     key: 'blob3',
                     className: "absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-cyan-200/35 blur-3xl pointer-events-none"
                 }),
-                // Используем общий Header
                 React.createElement(Header, {
                     key: 'header',
                     title: 'Кристальная рулетка',
@@ -3324,7 +3973,6 @@
                 }, React.createElement('div', {
                     className: "flex flex-col lg:grid lg:grid-cols-[1fr_auto] gap-4 lg:gap-8 items-start"
                 }, mode === 'single' ? [
-                    // ===== Режим одной рулетки =====
                     React.createElement('div', {
                         key: 'wheel-single',
                         className: "flex flex-col items-center justify-center w-full"
@@ -3400,12 +4048,10 @@
                         disabled: false
                     }))
                 ] : [
-                    // ===== Режим двух рулеток =====
                     React.createElement('div', {
                         key: 'wheels-double',
                         className: "flex flex-col items-center justify-center w-full gap-4"
                     }, [
-                        // Колесо участников
                         React.createElement('div', {
                             key: 'wheel-participants',
                             className: "glass-strong rounded-2xl sm:rounded-3xl p-3 sm:p-8 inline-flex flex-col items-center w-full max-w-md lg:max-w-none"
@@ -3435,7 +4081,6 @@
                             }, isSpinning ? "..." : "SPIN участники")
                         ]),
 
-                        // Кнопка "Крутим оба" между колесами
                         React.createElement(Button, {
                             key: 'spin-both',
                             variant: 'primary',
@@ -3444,7 +4089,6 @@
                             className: "px-6 py-3 text-sm uppercase tracking-wider shadow-lg"
                         }, isSpinning ? "..." : "Крутим оба"),
 
-                        // Колесо призов
                         React.createElement('div', {
                             key: 'wheel-prizes',
                             className: "glass-strong rounded-2xl sm:rounded-3xl p-3 sm:p-8 inline-flex flex-col items-center w-full max-w-md lg:max-w-none"
@@ -3474,7 +4118,6 @@
                             }, isSpinning ? "..." : "SPIN призы")
                         ]),
 
-                        // История для двух рулеток (под колесами)
                         doubleHistory.length > 0 && React.createElement('div', {
                             key: 'history-double',
                             className: "glass rounded-2xl p-3 sm:p-4 w-full max-w-md lg:max-w-none"
@@ -3544,7 +4187,6 @@
                         })
                     ])
                 ])),
-                // Футер
                 React.createElement(Footer, { key: 'footer' }),
                 showModal && React.createElement(WinnerModal, {
                     key: 'modal',
@@ -3560,18 +4202,16 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
-        // Компонент игры "Камень Ножницы Бумага"
         function RPSApp() {
-            const [playerMove, setPlayerMove] = useState(null); // 'rock', 'paper', 'scissors'
+            const [playerMove, setPlayerMove] = useState(null);
             const [aiMove, setAiMove] = useState(null);
-            const [result, setResult] = useState(null); // 'win', 'lose', 'draw'
-            const [history, setHistory] = useState([]); // массив объектов {player, ai, result}
+            const [result, setResult] = useState(null);
+            const [history, setHistory] = useState([]);
             const [isPlaying, setIsPlaying] = useState(false);
             const [score, setScore] = useState({ player: 0, ai: 0 });
             const [gameOver, setGameOver] = useState(false);
             const timerRef = useRef(null);
 
-            // Символы для отображения
             const moveEmoji = {
                 rock: '✊',
                 paper: '✋',
@@ -3583,7 +4223,6 @@
                 scissors: 'Ножницы'
             };
 
-            // Определение победителя
             const getResult = (player, ai) => {
                 if (player === ai) return 'draw';
                 if (
@@ -3596,15 +4235,12 @@
                 return 'lose';
             };
 
-            // Стратегия ИИ: анализ паттернов игрока (без подсматривания)
             const aiStrategy = (playerHistory) => {
                 if (playerHistory.length === 0) {
-                    // Если история пуста, случайный выбор
                     const moves = ['rock', 'paper', 'scissors'];
                     return moves[Math.floor(Math.random() * moves.length)];
                 }
 
-                // Считаем частоты ходов игрока за всю историю
                 const counts = { rock: 0, paper: 0, scissors: 0 };
                 playerHistory.forEach(move => {
                     if (move === 'rock') counts.rock++;
@@ -3612,7 +4248,6 @@
                     else if (move === 'scissors') counts.scissors++;
                 });
 
-                // Находим самый частый ход
                 let maxCount = 0;
                 let mostFrequent = 'rock';
                 for (const [move, count] of Object.entries(counts)) {
@@ -3622,22 +4257,19 @@
                     }
                 }
 
-                // Если все частоты равны (или история мала), случайный выбор
                 if (maxCount === 0 || (counts.rock === counts.paper && counts.paper === counts.scissors)) {
                     const moves = ['rock', 'paper', 'scissors'];
                     return moves[Math.floor(Math.random() * moves.length)];
                 }
 
-                // Выбираем ход, который побеждает самый частый ход игрока
                 const counterMap = {
-                    rock: 'paper',   // бумага побеждает камень
-                    paper: 'scissors', // ножницы побеждают бумагу
-                    scissors: 'rock'    // камень побеждает ножницы
+                    rock: 'paper',
+                    paper: 'scissors',
+                    scissors: 'rock'
                 };
                 return counterMap[mostFrequent];
             };
 
-            // Сброс ходов для нового раунда
             const resetRound = () => {
                 setPlayerMove(null);
                 setAiMove(null);
@@ -3649,7 +4281,6 @@
                 }
             };
 
-            // Новая игра
             const newGame = () => {
                 resetRound();
                 setScore({ player: 0, ai: 0 });
@@ -3657,38 +4288,31 @@
                 setGameOver(false);
             };
 
-            // Обработка выбора игрока
             const handlePlayerMove = (move) => {
                 if (isPlaying || gameOver) return;
                 setIsPlaying(true);
 
-                // Устанавливаем ход игрока
                 setPlayerMove(move);
 
-                // ИИ выбирает ход на основе истории (без подсматривания)
                 const playerHistory = history.map(h => h.player);
                 const aiChoice = aiStrategy(playerHistory);
                 setAiMove(aiChoice);
 
-                // Определяем результат
                 const res = getResult(move, aiChoice);
                 setResult(res);
 
-                // Обновляем счет
                 setScore(prev => {
                     if (res === 'win') return { ...prev, player: prev.player + 1 };
                     if (res === 'lose') return { ...prev, ai: prev.ai + 1 };
                     return prev;
                 });
 
-                // Добавляем в историю
                 setHistory(prev => [{
                     player: move,
                     ai: aiChoice,
                     result: res
                 }, ...prev]);
 
-                // Проверяем, достиг ли кто-то 3 побед
                 const newScore = { ...score };
                 if (res === 'win') newScore.player += 1;
                 else if (res === 'lose') newScore.ai += 1;
@@ -3697,23 +4321,22 @@
                     setGameOver(true);
                     setIsPlaying(false);
                 } else {
-                    // Автоматический переход к следующему раунду через 1.5 сек
                     timerRef.current = setTimeout(() => {
                         resetRound();
                     }, 1500);
                 }
             };
 
-            // Очистка таймера при размонтировании
             useEffect(() => {
                 return () => {
                     if (timerRef.current) clearTimeout(timerRef.current);
                 };
             }, []);
 
-            // Подсчет статистики
             const stats = useMemo(() => {
-                let wins = 0, loses = 0, draws = 0;
+                let wins = 0,
+                    loses = 0,
+                    draws = 0;
                 history.forEach(h => {
                     if (h.result === 'win') wins++;
                     else if (h.result === 'lose') loses++;
@@ -3722,7 +4345,6 @@
                 return { wins, loses, draws };
             }, [history]);
 
-            // Форматирование результата для отображения
             const resultText = {
                 win: 'Вы выиграли! 🎉',
                 lose: 'ИИ выиграл 😅',
@@ -3732,7 +4354,6 @@
             return React.createElement('div', {
                 className: 'gradient-bg min-h-screen flex flex-col relative overflow-hidden'
             }, [
-                // Декоративные блобы
                 React.createElement('div', {
                     key: 'blob1',
                     className: 'absolute -top-32 -right-32 w-96 h-96 rounded-full bg-violet-200/45 blur-3xl pointer-events-none'
@@ -3745,8 +4366,6 @@
                     key: 'blob3',
                     className: 'absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-cyan-200/35 blur-3xl pointer-events-none'
                 }),
-
-                // Шапка
                 React.createElement(Header, {
                     key: 'header',
                     title: 'Камень Ножницы Бумага',
@@ -3765,13 +4384,10 @@
                     })),
                     onBack: () => window.showPage('home')
                 }),
-
-                // Основное содержимое
                 React.createElement('main', {
                     key: 'main',
                     className: 'relative z-10 flex-1 max-w-4xl mx-auto px-4 py-6 sm:py-10 w-full'
                 }, [
-                    // Счет
                     React.createElement('div', {
                         key: 'scoreboard',
                         className: 'flex justify-center gap-8 mb-4 text-sm sm:text-base font-medium text-slate-600'
@@ -3780,8 +4396,6 @@
                         React.createElement('span', null, 'ИИ: ', score.ai),
                         React.createElement('span', null, 'До 3 побед')
                     ]),
-
-                    // Арена
                     React.createElement('div', {
                         key: 'arena',
                         className: 'glass-strong rounded-3xl p-6 sm:p-8 mb-6'
@@ -3789,7 +4403,6 @@
                         React.createElement('div', {
                             className: 'flex items-center justify-between gap-4 sm:gap-8'
                         }, [
-                            // Игрок
                             React.createElement('div', {
                                 className: 'flex-1 flex flex-col items-center'
                             }, [
@@ -3800,11 +4413,9 @@
                                     className: 'arena-card w-full flex items-center justify-center min-h-[100px] sm:min-h-[150px] text-5xl sm:text-7xl'
                                 }, playerMove ? moveEmoji[playerMove] : '❓')
                             ]),
-                            // Разделитель
                             React.createElement('div', {
                                 className: 'flex-shrink-0 text-sm font-bold text-slate-400'
                             }, result ? resultText[result] : 'VS'),
-                            // ИИ
                             React.createElement('div', {
                                 className: 'flex-1 flex flex-col items-center'
                             }, [
@@ -3817,8 +4428,6 @@
                             ])
                         ])
                     ]),
-
-                    // Карты выбора
                     React.createElement('div', {
                         key: 'choices',
                         className: 'flex justify-center gap-4 sm:gap-6 mb-6'
@@ -3839,8 +4448,6 @@
                             }, moveLabel[move])
                         ])
                     )),
-
-                    // Сообщение о завершении игры и кнопка "Новая игра"
                     gameOver && React.createElement('div', {
                         key: 'gameover',
                         className: 'text-center mb-6'
@@ -3853,8 +4460,6 @@
                             className: 'px-6 py-2 rounded-full bg-gradient-to-r from-violet-400 to-sky-400 hover:from-violet-300 hover:to-sky-300 text-white font-medium text-sm shadow-lg shadow-violet-400/25 transition-all active:scale-95'
                         }, 'Новая игра')
                     ]),
-
-                    // Статистика и история
                     React.createElement('div', {
                         key: 'stats',
                         className: 'glass rounded-2xl p-4 sm:p-6'
@@ -3907,8 +4512,6 @@
                         )
                     ])
                 ]),
-
-                // Футер
                 React.createElement(Footer, { key: 'footer' })
             ]);
         }
