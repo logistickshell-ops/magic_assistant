@@ -526,11 +526,12 @@
             font-weight: 600;
         }
 
+        /* Увеличенные отступы между кубиками */
         #dice-app .dice-grid {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
+            gap: 1rem;
             flex-wrap: nowrap;
             width: 100%;
             max-width: 100%;
@@ -538,12 +539,12 @@
         }
         @media (min-width: 480px) {
             #dice-app .dice-grid {
-                gap: 1rem;
+                gap: 1.25rem;
             }
         }
         @media (min-width: 640px) {
             #dice-app .dice-grid {
-                gap: 1.5rem;
+                gap: 1.75rem;
             }
         }
 
@@ -1421,7 +1422,7 @@
                 display: none;
             }
             #dice-app .dice-grid {
-                gap: 0.5rem !important;
+                gap: 0.75rem !important;
             }
         }
         @media (max-height: 500px) and (orientation: landscape) {
@@ -1997,21 +1998,23 @@
                 } catch (e) {}
             }, []);
 
-            // Расчёт размера кубика — адаптивный, с учётом контейнера
+            // Расчёт размера кубика — уменьшен на 12% для лучшего разделения
             const dieSize = useCallback(() => {
                 const w = window.innerWidth;
                 const h = window.innerHeight;
                 const maxContainerWidth = Math.min(w - 32, 440);
-                const maxSize = Math.floor((maxContainerWidth - (count - 1) * 16) / count);
-                let size = Math.max(42, Math.min(110, maxSize));
-
+                // вычисляем базовый размер с учётом отступов (16px между кубиками)
+                let size = Math.floor((maxContainerWidth - (count - 1) * 16) / count);
+                // уменьшаем на 12%, чтобы между кубиками был зазор
+                size = Math.floor(size * 0.88);
+                // ограничения для маленьких экранов
                 if (h < 500) {
                     size = Math.min(size, Math.floor((h - 100) / count));
                 }
                 if (w < 380) {
                     size = Math.min(size, Math.floor((w - 48) / count));
                 }
-                return Math.max(36, size);
+                return Math.max(32, size);
             }, [count]);
 
             // Рендер кубиков
