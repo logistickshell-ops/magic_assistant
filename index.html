@@ -1897,9 +1897,9 @@
         }
     </script>
 
-    <!-- ===== Код расклада (React) – ИСПРАВЛЕННАЯ ВЕРСИЯ ===== -->
+    <!-- ===== Код расклада (React) – стабильная версия без автообновления ===== -->
     <script type="text/babel">
-        const { useState, useEffect, useMemo, useCallback } = React;
+        const { useState, useEffect, useMemo, useCallback, useRef } = React;
 
         const GRID_OPTIONS = [
             { label: '4 × 3 (12 ячеек)', value: '4x3', w: 4, h: 3 },
@@ -1911,9 +1911,6 @@
         ];
 
         const CARD_BACK_URL = 'https://raw.githubusercontent.com/logistickshell-ops/rasklad/main/rub.jpg';
-
-        // Сохранение параметров в localStorage
-        const STORAGE_KEY = 'rasklad-settings';
 
         function shuffleArray(array) {
             const arr = [...array];
@@ -1962,28 +1959,38 @@
         }
 
         function LayoutApp() {
-            // Восстановление из localStorage
-            const saved = useMemo(() => {
-                try {
-                    const data = localStorage.getItem(STORAGE_KEY);
-                    if (data) return JSON.parse(data);
-                } catch (e) {}
-                return null;
-            }, []);
-
-            const [winCount, setWinCount] = useState(saved?.winCount ?? 2);
-            const [burnCount, setBurnCount] = useState(saved?.burnCount ?? 1);
-            const [gridValue, setGridValue] = useState(saved?.gridValue ?? '4x3');
-            const [winText, setWinText] = useState(saved?.winText ?? '');
-            const [burnText, setBurnText] = useState(saved?.burnText ?? '');
+            const [winCount, setWinCount] = useState(2);
+            const [burnCount, setBurnCount] = useState(1);
+            const [gridValue, setGridValue] = useState('4x3');
+            const [winText, setWinText] = useState('');
+            const [burnText, setBurnText] = useState('');
             const [cards, setCards] = useState([]);
             const [isAllVisible, setIsAllVisible] = useState(false);
             const [cardBackSrc, setCardBackSrc] = useState(CARD_BACK_URL);
             const [previewImage, setPreviewImage] = useState(null);
             const [isShooting, setIsShooting] = useState(false);
+            const [layoutKey, setLayoutKey] = useState(0);
 
             const gridConfig = useMemo(() => GRID_OPTIONS.find(o => o.value === gridValue), [gridValue]);
             const totalSpecial = winCount + burnCount;
+
+            // Загружаем рубашку один раз при старте
+            useEffect(() => {
+                let isMounted = true;
+                fetch(CARD_BACK_URL)
+                    .then(r => r.blob())
+                    .then(blob => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            if (isMounted && typeof reader.result === 'string') {
+                                setCardBackSrc(reader.result);
+                            }
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch(() => {});
+                return () => { isMounted = false; };
+            }, []);
 
             const generateLayout = useCallback(() => {
                 const totalCells = gridConfig.w * gridConfig.h;
@@ -2007,50 +2014,28 @@
                 const burnLabels = burnText.split(',').map(s => s.trim()).filter(Boolean);
 
                 winIndices.forEach((idx, i) => {
-                    newCards[idx].type = 'win';
-                    newCards[idx].label = winLabels[i] || '✦';
+                    if (idx < newCards.length) {
+                        newCards[idx].type = 'win';
+                        newCards[idx].label = winLabels[i] || '✦';
+                    }
                 });
 
                 burnIndices.forEach((idx, i) => {
-                    newCards[idx].type = 'burn';
-                    newCards[idx].label = burnLabels[i] || '🔥';
+                    if (idx < newCards.length) {
+                        newCards[idx].type = 'burn';
+                        newCards[idx].label = burnLabels[i] || '🔥';
+                    }
                 });
 
                 setCards(newCards);
                 setIsAllVisible(false);
+                setLayoutKey(prev => prev + 1);
             }, [gridConfig, winCount, burnCount, winText, burnText, totalSpecial]);
 
-            // Сохранение в localStorage при изменении параметров
-            useEffect(() => {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                        winCount,
-                        burnCount,
-                        gridValue,
-                        winText,
-                        burnText,
-                    }));
-                } catch (e) {}
-            }, [winCount, burnCount, gridValue, winText, burnText]);
+            // Первый расклад при загрузке — только один раз
+            useEffect(() => { generateLayout(); }, []);
 
-            // Перегенерация при изменении любых параметров
-            useEffect(() => {
-                generateLayout();
-            }, [winText, burnText, winCount, burnCount, gridValue, generateLayout]);
-
-            // Загружаем рубашку как base64 — нет CORS проблем
-            useEffect(() => {
-                fetch(CARD_BACK_URL)
-                    .then(r => r.blob())
-                    .then(blob => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            if (typeof reader.result === 'string') setCardBackSrc(reader.result);
-                        };
-                        reader.readAsDataURL(blob);
-                    })
-                    .catch(() => {});
-            }, []);
+            // Смена сетки – только по кнопке, без автообновления
 
             const handleCardClick = (id) => {
                 setCards(prev => prev.map(c => c.id === id ? { ...c, isOpen: !c.isOpen } : c));
@@ -2070,7 +2055,6 @@
                 if (!element || isShooting) return;
 
                 setIsShooting(true);
-                // ждём два кадра чтобы React отрисовал
                 await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
                 try {
@@ -2106,7 +2090,6 @@
                     key: 'blob3',
                     className: 'absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-cyan-200/35 blur-3xl pointer-events-none'
                 }),
-                // Шапка
                 React.createElement(Header, {
                     key: 'header',
                     title: 'Светлый расклад',
@@ -2126,20 +2109,17 @@
                     onBack: () => window.showPage('home')
                 }),
 
-                // Основной контент с ограничением ширины
                 React.createElement('div', {
                     key: 'content',
                     className: 'relative z-10 max-w-md mx-auto p-4 flex flex-col items-center w-full'
                 }, [
-                    // Область для скриншота (только карты + дата)
                     React.createElement('div', { key: 'screenshot', id: 'screenshot-area', className: 'w-full flex flex-col items-center pb-2' }, [
-                        // Сетка карт
                         React.createElement('div', {
                             key: 'grid',
                             className: 'w-full bg-white/40 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/60 mb-2 relative overflow-hidden'
                         }, [
                             React.createElement('div', {
-                                key: 'inner-grid',
+                                key: 'inner-grid-' + layoutKey,
                                 className: 'grid gap-3 transition-all duration-300 mx-auto',
                                 style: {
                                     gridTemplateColumns: 'repeat(' + gridConfig.w + ', 52px)',
@@ -2154,17 +2134,15 @@
                                     React.createElement(CardBack, { src: cardBackSrc, cardId: card.id }) :
                                     React.createElement(CardFront, { card })
                                 )
-                            )),
+                            ))
                         ]),
 
-                        // Дата под сеткой
                         React.createElement('div', {
                             key: 'date',
                             className: 'text-center text-[9px] text-gray-300 tracking-widest uppercase'
                         }, 'Светлый Расклад • ' + new Date().toLocaleDateString('ru-RU'))
                     ]),
 
-                    // Легенда
                     React.createElement('div', {
                         key: 'legend',
                         className: 'flex justify-between w-full gap-2 mb-6 mt-4 text-[9px] font-medium uppercase tracking-tighter'
@@ -2183,12 +2161,10 @@
                         ])
                     ]),
 
-                    // Панель управления
                     React.createElement('div', {
                         key: 'controls',
                         className: 'w-full bg-white/70 backdrop-blur rounded-3xl p-6 shadow-lg border border-white flex flex-col gap-5'
                     }, [
-                        // Параметры
                         React.createElement('div', { key: 'params', className: 'flex justify-between items-start' }, [
                             React.createElement('div', { key: 'text' }, [
                                 React.createElement('h2', { className: 'text-gray-700 font-bold text-sm' }, 'Параметры расклада'),
@@ -2200,7 +2176,6 @@
                             ])
                         ]),
 
-                        // Счётчики
                         React.createElement('div', { key: 'win' }, [
                             React.createElement('label', { className: 'text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block' }, 'ВЫИГРЫШНЫЕ'),
                             React.createElement('div', { className: 'flex items-center bg-white rounded-xl border border-gray-100 px-3 py-1 shadow-sm' }, [
@@ -2221,7 +2196,6 @@
                             ])
                         ]),
 
-                        // Сетка
                         React.createElement('div', { key: 'layout' }, [
                             React.createElement('label', { className: 'text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block' }, 'РАСКЛАД'),
                             React.createElement('select', {
@@ -2233,7 +2207,6 @@
                             ))
                         ]),
 
-                        // Текстовые поля
                         React.createElement('div', { key: 'texts', className: 'grid grid-cols-2 gap-3' }, [
                             React.createElement('div', { key: 'win-text' }, [
                                 React.createElement('label', { className: 'text-[9px] font-black text-green-500 uppercase mb-1 block' }, 'ТЕКСТ (ВЫИГРЫШ)'),
@@ -2255,7 +2228,6 @@
                             ])
                         ]),
 
-                        // Кнопки
                         React.createElement('div', { key: 'buttons', className: 'grid grid-cols-2 gap-3 mt-2' }, [
                             React.createElement('button', {
                                 onClick: generateLayout,
@@ -2277,7 +2249,6 @@
                             }, isShooting ? '⏳ Снимок…' : '📷 Снимок')
                         ]),
 
-                        // Статистика
                         React.createElement('div', { key: 'stats', className: 'pt-4 mt-2 border-t border-gray-50 flex justify-between items-center' }, [
                             React.createElement('div', { className: 'text-[10px] text-gray-400' }, [
                                 'Открыто ',
@@ -2287,7 +2258,6 @@
                             React.createElement('div', { className: 'bg-gray-50 rounded-lg px-2 py-1 text-[10px] text-gray-400 font-mono tracking-tighter' }, gridConfig.w + ' × ' + gridConfig.h)
                         ]),
 
-                        // Нижний блок
                         React.createElement('div', { key: 'bottom', className: 'flex gap-2' }, [
                             React.createElement('div', { className: 'flex-1 bg-green-50 text-green-500 rounded-full py-1 text-center text-[10px] font-bold' }, '💎 ' + winCount),
                             React.createElement('div', { className: 'flex-1 bg-red-50 text-red-500 rounded-full py-1 text-center text-[10px] font-bold' }, '🔥 ' + burnCount),
@@ -2295,7 +2265,6 @@
                         ])
                     ]),
 
-                    // Превью модалка
                     previewImage && React.createElement(Modal, {
                         key: 'preview',
                         isOpen: true,
@@ -2324,7 +2293,6 @@
                         ])
                     ]),
 
-                    // Футер
                     React.createElement(Footer, { key: 'footer' })
                 ])
             ]);
