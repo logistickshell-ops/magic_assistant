@@ -1897,7 +1897,7 @@
         }
     </script>
 
-    <!-- ===== Код расклада (React) ===== -->
+    <!-- ===== Код расклада (React) – ИСПРАВЛЕННАЯ ВЕРСИЯ ===== -->
     <script type="text/babel">
         const { useState, useEffect, useMemo, useCallback } = React;
 
@@ -2011,11 +2011,10 @@
             // Первый расклад при загрузке
             useEffect(() => { generateLayout(); }, []);
 
-            // Смена сетки
+            // Смена сетки – перегенерируем автоматически
             useEffect(() => { generateLayout(); }, [gridValue]);
 
-            // Авто-перегенерация при смене числа карт
-            useEffect(() => { generateLayout(); }, [winCount, burnCount]);
+            // УДАЛЁН эффект на winCount и burnCount – перегенерация только по кнопке "Новый расклад"
 
             // Загружаем рубашку как base64 — нет CORS проблем
             useEffect(() => {
