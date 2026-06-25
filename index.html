@@ -526,7 +526,6 @@
             font-weight: 600;
         }
 
-        /* Увеличенные отступы между кубиками */
         #dice-app .dice-grid {
             display: flex;
             align-items: center;
@@ -544,7 +543,7 @@
         }
         @media (min-width: 640px) {
             #dice-app .dice-grid {
-                gap: 1.75rem;
+                gap: 1.5rem;
             }
         }
 
@@ -1998,24 +1997,23 @@
                 } catch (e) {}
             }, []);
 
-            // Расчёт размера кубика — уменьшен на 12% для лучшего разделения
+            // Расчёт размера кубика — всегда как для 3 кубиков с зазором 24px
             const dieSize = useCallback(() => {
                 const w = window.innerWidth;
                 const h = window.innerHeight;
+                const gap = 24; // увеличенный промежуток
                 const maxContainerWidth = Math.min(w - 32, 440);
-                // вычисляем базовый размер с учётом отступов (16px между кубиками)
-                let size = Math.floor((maxContainerWidth - (count - 1) * 16) / count);
-                // уменьшаем на 12%, чтобы между кубиками был зазор
-                size = Math.floor(size * 0.88);
-                // ограничения для маленьких экранов
+                const maxSize = Math.floor((maxContainerWidth - (3 - 1) * gap) / 3);
+                let size = Math.max(40, Math.min(100, maxSize));
+
                 if (h < 500) {
-                    size = Math.min(size, Math.floor((h - 100) / count));
+                    size = Math.min(size, Math.floor((h - 100) / 3));
                 }
                 if (w < 380) {
-                    size = Math.min(size, Math.floor((w - 48) / count));
+                    size = Math.min(size, Math.floor((w - 48) / 3));
                 }
-                return Math.max(32, size);
-            }, [count]);
+                return Math.max(36, size);
+            }, []);
 
             // Рендер кубиков
             const renderDice = useCallback((diceValues, rollingState, snapshottingState) => {
@@ -2031,7 +2029,6 @@
                 if (sumBadge) {
                     sumBadge.textContent = diceValues.reduce((a, b) => a + b, 0);
                 }
-                // Никаких принудительных ширин — flex сам всё выравнивает
             }, [dieSize]);
 
             // Первоначальный рендер
